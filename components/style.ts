@@ -1,5 +1,28 @@
 import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
 import styled from '@emotion/styled'
+import { createTheme} from '@mui/material/styles';
+
+export const theme = createTheme({
+  components: {
+    MuiTabs: {
+      styleOverrides: {
+        root: `
+          min-height: 0;
+          .Mui-selected {
+            color: #484848 !important;
+          }
+        `,
+        indicator: {
+          display: 'none'
+        }
+      }
+    }
+  },
+  typography: {
+    fontFamily: '"Nunito Sans", "Roboto", "Helvetica", "Arial", sans-serif',
+  },
+})
 
 export const AppTitle = styled(Box)`
   h3 {
@@ -58,3 +81,22 @@ export const WhiteBackground = styled.div`
     color: #51C393;
   }
 `
+export const Card = styled(Box)((props: any) => {
+  const { radius, padding } = props
+  return `
+  background-color: white;
+  padding: ${padding ?? '12px'};
+  border-radius: ${radius ?? '12px'};
+  border: 1px solid #ECECEC;
+  // box-shadow: 0px 4px 50px 0px #00000014;
+`
+})
+export const SliderGrid = styled(Grid)`
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: visible;
+`
+SliderGrid.defaultProps = {
+  container: true,
+  className: 'scrollX',
+}

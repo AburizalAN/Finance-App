@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { AppTitle } from 'components/style'
 import TotalSaldoComponent from 'components/TotalSaldoComponent'
 import Box from '@mui/material/Box'
+import TabKantong from 'components/TabKantong'
 
 const Home: NextPage = () => {
   return (
@@ -13,11 +14,12 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AppTitle px="12px" pt="20px" mb="62px">
+      <AppTitle pt="20px" mb="62px">
         <h3>My Finance Application</h3>
       </AppTitle>
 
       <TotalSaldoComponent />
+      <TabKantong />
     </Box>
   )
 }
