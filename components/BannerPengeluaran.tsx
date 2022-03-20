@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import styled from '@emotion/styled'
 import ArchiveOut from 'components/icons/ArchiveOut'
