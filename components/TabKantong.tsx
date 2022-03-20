@@ -4,10 +4,13 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import { Card, SliderGrid } from 'components/style'
+import { SliderGrid } from 'components/style'
+import CardKantong from 'components/CardKantong'
+import AddIcon from 'components/icons/AddIcon'
 
 const Container = styled.div`
   margin-top: 62px;
+  position: relative;
 `
 const StyledTab = styled(Tab)`
   padding: 0;
@@ -20,6 +23,20 @@ const StyledTab = styled(Tab)`
   font-weight: 700;
   line-height: 17.73px;
   color: #AEAEAE;
+`
+const AddButton = styled.button`
+  background-color: #338379;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translateY(50%);
 `
 
 interface TabPanelProps {
@@ -46,9 +63,7 @@ const TabPanel = (props: TabPanelProps) => {
       <SliderGrid columnSpacing="12px" px="12px">
         {[...Array(4)].map((item, i: number) => (
           <Grid key={i} item>
-            <Card padding="24px 12px" width="155px">
-              <img src="/money-bag.png" alt="money bag" />
-            </Card>
+            <CardKantong />
           </Grid>
         ))}
       </SliderGrid>
@@ -81,6 +96,9 @@ const TabKantong = () => {
       <TabPanel value={value} index={2}>
         Item Three
       </TabPanel>
+      <AddButton>
+        <AddIcon />
+      </AddButton>
     </Container>
   )
 }
