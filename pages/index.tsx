@@ -4,6 +4,7 @@ import { AppTitle } from 'components/style'
 import TotalSaldoComponent from 'components/TotalSaldoComponent'
 import Box from '@mui/material/Box'
 import TabKantong from 'components/TabKantong'
+import BannerPengeluaran from 'components/BannerPengeluaran'
 
 const Home: NextPage = () => {
   return (
@@ -20,6 +21,7 @@ const Home: NextPage = () => {
 
       <TotalSaldoComponent />
       <TabKantong />
+      <BannerPengeluaran />
     </Box>
   )
 }
