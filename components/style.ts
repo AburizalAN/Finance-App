@@ -17,6 +17,20 @@ export const theme = createTheme({
           display: 'none'
         }
       }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: `
+          padding: 0;
+        `
+      }
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: `
+          font-size: 1rem;
+        `
+      }
     }
   },
   typography: {
