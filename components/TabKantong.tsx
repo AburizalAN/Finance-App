@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid'
 import { SliderGrid } from 'components/style'
 import CardKantong from 'components/CardKantong'
 import AddIcon from 'components/icons/AddIcon'
+import Link from 'next/link'
 
 const Container = styled.div`
   margin-top: 62px;
@@ -62,9 +63,11 @@ const TabPanel = (props: TabPanelProps) => {
     <Box mx="-12px" hidden={index !== value}>
       <SliderGrid columnSpacing="12px" px="12px">
         {[...Array(4)].map((item, i: number) => (
-          <Grid key={i} item>
-            <CardKantong />
-          </Grid>
+          <Link href={`/kantong/1`} key={i} passHref>
+            <Grid item>
+              <CardKantong />
+            </Grid>
+          </Link>
         ))}
       </SliderGrid>
     </Box>
