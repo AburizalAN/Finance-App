@@ -2,24 +2,15 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 
-export const Header = styled(Box)`
+export const Header = styled(Box)(({ pt }: any) => `
   padding: 12px;
+  padding-top: ${pt ?? 'inherit'};
   background-color: #5DB4A4;
   h1 {
     color: #fff;
   }
-`
-export const TopBar = styled.div`
-  display: flex;
-  align-items: center;
-`
-export const TopBarTitle = styled.div`
-  font-size: 13px;
-  line-height: 17.73px;
-  font-weight: 700;
-  color: #fff;
-  margin-right: auto;
-`
+`)
+
 export const Image = styled.img`
   margin: auto;
   display: block;
@@ -62,13 +53,22 @@ export const TransactionItem = styled.div`
     color: #51C393;
   }
 `
-export const BottomFixSection = styled(Box)`
-  padding: 12px 12px 20px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-`
+export const BottomFixSection = styled(Box)(({ bg }: any) => `
+  &&& {
+    background-color: ${bg ?? 'transparent'};
+    position: fixed;
+    bottom: 0;
+    left: 50% !important;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 12px 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+`)
 export const BottomFixButton = styled(Button)`
   text-transform: none;
   border-radius: 8px;

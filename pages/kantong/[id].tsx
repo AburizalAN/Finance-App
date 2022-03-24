@@ -6,29 +6,33 @@ import AddIcon from '@mui/icons-material/Add';
 
 import SelectDropdown from 'components/SelectDropdown'
 import FilterSection from 'components/FilterSection'
-import { Header, TopBar, TopBarTitle, Image, TitleHeader, DateTitle, TransactionItem, BottomFixSection, BottomFixButton } from 'components/screens/pemasukan.style'
+import TopBar from 'components/TopBar'
+import { Header, Image, TitleHeader, DateTitle, TransactionItem, BottomFixSection, BottomFixButton } from 'components/screens/pemasukan.style'
 
 const Pemasukan: NextPage = () => {
   return (
-    <Box sx={{ minHeight: "100vh" }}>
+    <Box
+      sx={{
+        height: "100vh",
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
+      <TopBar 
+        title="List Pemasukan"
+        variant="dark"
+        rightContent={<SelectDropdown />}
+      />
       {/* Bagian Header */}
-      <Header>
-        <TopBar>
-          <IconButton sx={{ marginRight: '12px' }}>
-            <ArrowLeft sx={{ width: 16, height: 16 }} />
-          </IconButton>
-          <TopBarTitle>List Pemasukan</TopBarTitle>
-          <SelectDropdown />
-        </TopBar>
+      <Header pt="59.719px">
         <Box mt="24px">
           <Image src="/money-bag.png" alt="money bag" />
           <TitleHeader>Tabungan Hari Tua</TitleHeader>
         </Box>
       </Header>
       {/* Bagian isi */}
-      <Box p="12px">
+      <Box p="12px" mb="78px" sx={{ flex: 1, overflow: 'auto' }}>
         <FilterSection />
-        {[...Array(3)].map((item, i) => (
+        {[...Array(10)].map((item, i) => (
           <Box key={i} mt="24px">
             <DateTitle>10 Maret 2010</DateTitle>
             <Box>
@@ -51,7 +55,7 @@ const Pemasukan: NextPage = () => {
         ))}
       </Box>
       {/* Bagian Bottom Navigation */}
-      <BottomFixSection>
+      <BottomFixSection bg="#fcfcfc">
         <BottomFixButton
           variant="outlined"
           fullWidth
