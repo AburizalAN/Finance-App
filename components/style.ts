@@ -32,11 +32,24 @@ export const theme = createTheme({
           font-size: 1rem;
         `
       }
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: `
+          line-height: 1;
+          text-transform: none;
+        `
+      }
     }
   },
   typography: {
     fontFamily: '"Nunito Sans", "Roboto", "Helvetica", "Arial", sans-serif',
   },
+  palette: {
+    primary: {
+      main: '#7C58AA',
+    }
+  }
 })
 
 export const AppTitle = styled(Box)`

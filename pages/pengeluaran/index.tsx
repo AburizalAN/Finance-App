@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { NextPage } from 'next'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -11,8 +12,13 @@ import IconButton from '@mui/material/IconButton'
 import AddIcon from 'components/icons/AddIcon'
 import Link from 'next/link'
 import { ThisCard, ThisAddButton, ThisLinearProgress } from 'components/screens/pengeluaran.style'
+import ModalAddExpend from 'components/ModalAddExpend'
+import ModalSelectTag from 'components/ModalSelectTag'
 
 const Pengeluaran: NextPage = () => {
+  const [showAddExpend, setShowAddExpend] = useState(false)
+  const [showSelectTag, setShowSelectTag] = useState(false)
+
   return (
     <Box px="12px" sx={{ minHeight: "100vh", position: 'relative' }}>
       <TopBar title="Pengeluaran" />
@@ -60,9 +66,15 @@ const Pengeluaran: NextPage = () => {
           </Link>
         ))}
       </Grid>
-      <ThisAddButton>
+      <ThisAddButton onClick={() => setShowAddExpend(true)}>
         <AddIcon />
       </ThisAddButton>
+      <ModalAddExpend 
+        open={showAddExpend}
+        handleClose={() => setShowAddExpend(false)}
+        selectTag={() => setShowSelectTag(true)}
+      />
+      <ModalSelectTag open={showSelectTag} handleClose={() => setShowSelectTag(false)}/>
     </Box>
   )
 }
