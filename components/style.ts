@@ -2,6 +2,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import styled from '@emotion/styled'
 import { createTheme} from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
 
 export const theme = createTheme({
   components: {
@@ -96,13 +97,14 @@ export const WhiteBackground = styled.div`
   }
 `
 export const Card = styled(Box)((props: any) => {
-  const { radius, padding } = props
+  const { radius, padding, shadow } = props
   return `
   background-color: white;
   padding: ${padding ?? '12px'};
   border-radius: ${radius ?? '12px'};
   border: 1px solid #ECECEC;
   // box-shadow: 0px 4px 50px 0px #00000014;
+  box-shadow: ${shadow ?? 'none'};
 `
 })
 export const SliderGrid = styled(Grid)`
@@ -114,3 +116,17 @@ SliderGrid.defaultProps = {
   container: true,
   className: 'scrollX',
 }
+export const AddButton = styled(IconButton)`
+  background-color: #338379 !important;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translateY(50%);
+`

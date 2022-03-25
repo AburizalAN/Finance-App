@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import { SliderGrid } from 'components/style'
+import { SliderGrid, AddButton } from 'components/style'
 import CardKantong from 'components/CardKantong'
 import AddIcon from 'components/icons/AddIcon'
 import Link from 'next/link'
@@ -24,20 +24,6 @@ const StyledTab = styled(Tab)`
   font-weight: 700;
   line-height: 17.73px;
   color: #AEAEAE;
-`
-const AddButton = styled.button`
-  background-color: #338379;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  transform: translateY(50%);
 `
 
 interface TabPanelProps {

@@ -2,27 +2,6 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 
-export const Header = styled(Box)(({ pt }: any) => `
-  padding: 12px;
-  padding-top: ${pt ?? 'inherit'};
-  background-color: #5DB4A4;
-  h1 {
-    color: #fff;
-  }
-`)
-
-export const Image = styled.img`
-  margin: auto;
-  display: block;
-`
-export const TitleHeader = styled.div`
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1;
-  margin-top: 12px;
-  text-align: center;
-  color: white;
-`
 export const DateTitle = styled.div`
   font-size: 13px;
   line-height: 17.73px;

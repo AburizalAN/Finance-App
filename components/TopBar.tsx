@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import ArrowLeft from 'components/icons/ArrowLeft'
+import { useRouter } from 'next/router'
 
 interface PropTypes {
   rightContent?: ReactNode
@@ -30,9 +31,11 @@ export const TopBarTitle = styled.div`
 `
 
 const TopBar = ({ title = 'title', rightContent = null, variant = 'light' }: PropTypes) => {
+  const router = useRouter()
+
   return (
     <Container>
-      <IconButton sx={{ marginRight: '12px' }}>
+      <IconButton onClick={() => router.back()} sx={{ marginRight: '12px' }}>
         <ArrowLeft 
           fill={variant === 'light' ? '#484848' : variant === 'dark' ? 'white' : null } 
           sx={{ width: 16, height: 16 }}

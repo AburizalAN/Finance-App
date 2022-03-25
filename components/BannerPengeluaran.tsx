@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid'
 import styled from '@emotion/styled'
 import ArchiveOut from 'components/icons/ArchiveOut'
+import Link from 'next/link'
 
 const Container = styled(Grid)`
   margin-top: 62px;
@@ -27,15 +28,17 @@ const Title = styled.div`
 
 const BannerPengeluaran = () => {
   return (
-    <Container alignItems="center">
-      <Grid item xs>
-        <SubTitle>Pengeluaran Saya</SubTitle>
-        <Title>Rp1.000.000</Title>
-      </Grid>
-      <Grid item xs="auto" mr="16px">
-        <ArchiveOut />
-      </Grid>
-    </Container>
+    <Link href="/pengeluaran" passHref>
+      <Container alignItems="center">
+        <Grid item xs>
+          <SubTitle>Pengeluaran Saya</SubTitle>
+          <Title>Rp1.000.000</Title>
+        </Grid>
+        <Grid item xs="auto" mr="16px">
+          <ArchiveOut />
+        </Grid>
+      </Container>
+    </Link>
   )
 }
 
