@@ -6,9 +6,9 @@ import styled from '@emotion/styled'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
-import Fade from '@mui/material/Fade'
 import Bill from 'components/icons/Bill'
 import MuiButton from '@mui/material/Button'
+import Slide from '@mui/material/Slide';
 
 const Container = styled(Box)(() => (`
   &:focus-visible {
@@ -107,7 +107,7 @@ const ModalAddExpend = ({ open, handleClose, selectTag }: PropTypes) => {
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <Fade in={open}>
+      <Slide direction="up" mountOnEnter unmountOnExit in={open}>
         <Container>
             <ModalBox>
               <div className="topLine"></div>
@@ -140,7 +140,7 @@ const ModalAddExpend = ({ open, handleClose, selectTag }: PropTypes) => {
               </Box>
             </ModalBox>
         </Container>
-      </Fade>
+      </Slide>
     </Modal>
   )
 }
