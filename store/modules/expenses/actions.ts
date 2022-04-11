@@ -14,10 +14,17 @@ function getTags() {
   }
 }
 
+function getSummaryExpenses() {
+  return {
+    type: saga.GET_SUMMARY,
+  }
+}
+
 const actions: Object = {
   expenses: {
     getExpenses,
     getTags,
+    getSummaryExpenses,
   }
 }
 

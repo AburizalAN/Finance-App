@@ -42,11 +42,28 @@ export function* getTags() {
   }
 }
 
+export function* getSummaryExpenses() {
+  try {
+    yield put ({ type: redux.GET_SUMMARY_LOADING })
+    let res: ResponseGenerator = yield call(SERVICES.getSummaryExpenses)
+
+    if (res.status !== 200) throw res.data.error
+
+    const { data } = res
+    const payload = data
+
+    yield put({ type: redux.GET_SUMMARY_SUCCESS, payload })
+  } catch(err) {
+    yield put({ type: redux.GET_SUMMARY_FAILURE, payload: err })
+  }
+} 
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function* () {
   yield all([
     takeEvery(saga.GET_EXPENSES, getExpenses),
-    takeEvery(saga.GET_TAGS, getTags)
+    takeEvery(saga.GET_TAGS, getTags),
+    takeEvery(saga.GET_SUMMARY, getSummaryExpenses),
   ])
 }
 

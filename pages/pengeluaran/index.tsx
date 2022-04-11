@@ -20,18 +20,44 @@ import ACTIONS from 'store/registerActions'
 
 const Pengeluaran: NextPage = () => {
   const dispatch = useDispatch()
-  const { expenses, tags } = useSelector((state: any) => state.expenses)
+  const { summary } = useSelector((state: any) => state.expenses)
 
   const [showAddExpend, setShowAddExpend] = useState(false)
   const [showSelectTag, setShowSelectTag] = useState(false)
+  const [tags, setTags] = useState([])
+  const [chartData, setChartData] = useState<any>({
+    labels: [],
+    datasets: [{
+      label: '# of Votes',
+      data: [],
+      backgroundColor: [],
+      borderWidth: 0,
+    }],
+  })
 
   useEffect(() => {
-    dispatch(ACTIONS.expenses.getExpenses())
-    dispatch(ACTIONS.expenses.getTags())
+    dispatch(ACTIONS.expenses.getSummaryExpenses())
   }, [])
 
-  console.log('expenses', expenses)
-  console.log('tags', tags)
+  const total = summary.find((item: any) => item.id === 'total')
+
+  useEffect(() => {
+    const _tags = summary.filter((item: any) => {
+      if (item.id !== 'total' && item.count > 0) {
+        setChartData((prev: any) => ({
+          ...prev,
+          labels: [...prev.labels, item.name],
+          datasets: [{
+            ...prev.datasets[0],
+            data: [ ...prev.datasets[0].data, item.count ],
+            backgroundColor: [ ...prev.datasets[0].backgroundColor, item.color ],
+          }]
+        }))
+        return item
+      }
+    })
+    setTags(_tags)
+  }, [summary])
 
   return (
     <Box px="12px" sx={{ minHeight: "100vh", position: 'relative' }}>
@@ -51,7 +77,7 @@ const Pengeluaran: NextPage = () => {
             <Filter sx={{ fontSize: '24px' }}/>
           </IconButton>
         </Box>
-        <PieChart />
+        <PieChart value={total && total.count} data={chartData} />
       </Box>
       <Grid mt="30px" mb="12px" container justifyContent="end" alignItems="center">
         <IconButton>
@@ -59,6 +85,24 @@ const Pengeluaran: NextPage = () => {
         </IconButton>
       </Grid>
       <Grid container direction="column" sx={{ rowGap: '12px' }}>
+        <Link href="/pengeluaran/12" passHref>
+          <Grid item xs="auto">
+            <ThisCard>
+              <div className="icon">
+                <Bill fontSize="16px"/>
+              </div>
+              <Box sx={{ flex: 1 }}>
+                <h5>{total && total.name}</h5>
+                <Box mt="8px">
+                  <ThisLinearProgress variant="determinate" value={100} />
+                </Box>
+              </Box>
+              <IconButton>
+                <ArrowForwardIosIcon sx={{ fontSize: '16px' }} />
+              </IconButton>
+            </ThisCard>
+          </Grid>
+        </Link>
         {tags.map((tag: any, i: number) => (
           <Link key={i} href="/pengeluaran/12" passHref>
             <Grid item xs="auto">
@@ -73,7 +117,7 @@ const Pengeluaran: NextPage = () => {
                 <Box sx={{ flex: 1 }}>
                   <h5>{tag.name}</h5>
                   <Box mt="8px">
-                    <ThisLinearProgress variant="determinate" value={100} />
+                    <ThisLinearProgress variant="determinate" value={tag.count / total.count * 100} />
                   </Box>
                 </Box>
                 <IconButton>

@@ -6,6 +6,7 @@ const { redux } = types
 const initialState = {
   loading: true,
   expenses: [],
+  summary: [],
   tags: [],
   error: null,
 }
@@ -31,6 +32,15 @@ const expenses = (state = initialState, action: any) => {
         error: null,
       }
 
+    case redux.GET_SUMMARY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        summary: action.payload,
+      }
+
+    case redux.GET_SUMMARY_FAILURE:
     case redux.GET_TAGS_FAILURE:
     case redux.GET_EXPENSES_FAILURE:
       return {
@@ -39,6 +49,7 @@ const expenses = (state = initialState, action: any) => {
         error: action.payload,
       }
 
+    case redux.GET_SUMMARY_LOADING:
     case redux.GET_TAGS_LOADING:
     case redux.GET_EXPENSES_LOADING:
       return {

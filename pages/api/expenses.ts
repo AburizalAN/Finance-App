@@ -9,18 +9,15 @@ export const config = {
   },
 }
 
-type Data = {
-  name: string
-  method: string
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const { method } = req
+  const { method, query } = req
   const pengeluaranRef = db.collection('pengeluaran')
   const tagsRef = db.collection('tags')
+
+  const { tag = null }: { tag?: any } = query
 
   if (method === 'POST') {
     try {
@@ -40,32 +37,6 @@ export default async function handler(
       await pengeluaranRef.add(payload).then(async (response: any) => {
         console.log('success', response.id)
 
-        let countExpensesByTag: number = 0
-        let countTotal: number = 0
-
-        // count expenses by tag
-        const snapshotByTag = await pengeluaranRef.where('tag.id', '==', payload.tag.id).get()
-        snapshotByTag.forEach((doc: any) => {
-          countExpensesByTag += doc.data().value
-        })
-
-        // count total expenses
-        const snapshotExpenses = await pengeluaranRef.get()
-        snapshotExpenses.forEach((doc: any) => {
-          countTotal += doc.data().value
-        })
-
-        const selectedTagRef = db.collection('summary_expenses').doc(payload.tag.id.toString())
-        const totalRef = db.collection('summary_expenses').doc('total')
-        await selectedTagRef.set({
-          name: payload.tag.name,
-          color: payload.tag.color,
-          count: countExpensesByTag,
-        })
-        await totalRef.set({
-          name: 'Total',
-          count: countTotal,
-        })
         return res.status(200).json({ 
           status: 200,
           message: 'success',
@@ -87,7 +58,7 @@ export default async function handler(
   if (method === 'GET') {
     try {
       let collection: any[] = []
-      const snapshotExpense = await pengeluaranRef.get()
+      const snapshotExpense = tag ? await pengeluaranRef.where('tag.id', '==', parseInt(tag)).get() : await pengeluaranRef.get()
       snapshotExpense.forEach((doc: any) => {
         collection.push({
           id: doc.id,

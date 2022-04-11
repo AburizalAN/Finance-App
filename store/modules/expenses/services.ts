@@ -10,9 +10,15 @@ async function getTags() {
   return res
 }
 
+async function getSummaryExpenses() {
+  const res = await get(`/api/summary-expenses`)
+  return res
+}
+
 const services = {
   getExpenses,
   getTags,
+  getSummaryExpenses,
 }
 
 export default services
