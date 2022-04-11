@@ -11,7 +11,7 @@ const Container = styled(Box)`
   display: flex;
   align-items: center;
   grid-column-gap: 8px;
-  > div:nth-child(2) {
+  > div:nth-of-type(2) {
     color: #757575;
   }
 `

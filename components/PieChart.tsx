@@ -37,11 +37,11 @@ const Text = styled.div`
   color: #5C4949;
   font-size: 20px;
   text-align: center;
-  div:nth-child(1) {
+  div:nth-of-type(1) {
     font-weight: 700;
     margin-bottom: 6px;  
   }
-  div:nth-child(2) {
+  div:nth-of-type(2) {
     font-weight: 800;
   }
 `

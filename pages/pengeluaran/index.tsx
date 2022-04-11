@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { NextPage } from 'next'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -15,9 +15,23 @@ import { ThisCard, ThisAddButton, ThisLinearProgress } from 'components/screens/
 import ModalAddExpend from 'components/ModalAddExpend'
 import ModalSelectTag from 'components/ModalSelectTag'
 
+import { useSelector, useDispatch } from 'react-redux'
+import ACTIONS from 'store/registerActions'
+
 const Pengeluaran: NextPage = () => {
+  const dispatch = useDispatch()
+  const { expenses, tags } = useSelector((state: any) => state.expenses)
+
   const [showAddExpend, setShowAddExpend] = useState(false)
   const [showSelectTag, setShowSelectTag] = useState(false)
+
+  useEffect(() => {
+    dispatch(ACTIONS.expenses.getExpenses())
+    dispatch(ACTIONS.expenses.getTags())
+  }, [])
+
+  console.log('expenses', expenses)
+  console.log('tags', tags)
 
   return (
     <Box px="12px" sx={{ minHeight: "100vh", position: 'relative' }}>
@@ -45,15 +59,19 @@ const Pengeluaran: NextPage = () => {
         </IconButton>
       </Grid>
       <Grid container direction="column" sx={{ rowGap: '12px' }}>
-        {[...Array(4)].map((_, i) => (
+        {tags.map((tag: any, i: number) => (
           <Link key={i} href="/pengeluaran/12" passHref>
             <Grid item xs="auto">
               <ThisCard>
-                <div className="icon">
+                <div className="icon" 
+                  style={{ 
+                    backgroundColor: tag.color 
+                  }}
+                >
                   <Bill fontSize="16px"/>
                 </div>
                 <Box sx={{ flex: 1 }}>
-                  <h5>Tagihan</h5>
+                  <h5>{tag.name}</h5>
                   <Box mt="8px">
                     <ThisLinearProgress variant="determinate" value={100} />
                   </Box>
