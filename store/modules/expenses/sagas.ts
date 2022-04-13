@@ -72,7 +72,24 @@ export function* getSummaryExpenses() {
   } catch(err) {
     yield put({ type: redux.GET_SUMMARY_FAILURE, payload: err })
   }
-} 
+}
+
+export function* postExpenseData({ value, callback }: any) {
+  try {
+    yield put({ type: redux.POST_EXPENSE_LOADING })
+    let res: ResponseGenerator = yield call(SERVICES.postExpenseData, value)
+    
+    if (res.status !== 200) throw res.data.error
+
+    const { data } = res
+    const payload = data
+
+    yield put({ type: redux.POST_EXPENSE_SUCCESS })
+    callback()
+  } catch(err) {
+    yield put({ type: redux.POST_EXPENSE_FAILURE, payload: err })
+  }
+}
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function* () {
@@ -81,6 +98,7 @@ export default function* () {
     takeEvery(saga.GET_TAGS, getTags),
     takeEvery(saga.GET_SUMMARY, getSummaryExpenses),
     takeEvery(saga.GET_DETAIL_TAG, (props: any) => getDetailTag(props)),
+    takeEvery(saga.POST_EXPENSE, (props: any) => postExpenseData(props)),
   ])
 }
 

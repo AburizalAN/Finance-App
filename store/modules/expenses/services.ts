@@ -1,4 +1,4 @@
-import { get } from 'services/fetch'
+import { get, post } from 'services/fetch'
 
 async function getExpenses(id: any) {
   const res = await get(`/api/expenses${id !== null && id !== 'total' ? `?tag=${id}` : ''}`)
@@ -20,11 +20,17 @@ async function getSummaryExpenses() {
   return res
 }
 
+async function postExpenseData(payload: any) {
+  const res = await post(`/api/expenses`, payload)
+  return res
+}
+
 const services = {
   getExpenses,
   getTags,
   getSummaryExpenses,
   getDetailTag,
+  postExpenseData,
 }
 
 export default services

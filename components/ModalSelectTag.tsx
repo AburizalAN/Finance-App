@@ -8,11 +8,6 @@ import Bill from 'components/icons/Bill'
 import MuiButton from '@mui/material/Button'
 import Checklist from 'components/icons/Checklist'
 
-interface PropTypes {
-  open: boolean
-  handleClose: () => void
-}
-
 const Container = styled(Box)(() => (`
   width: 100%;
   position: fixed;
@@ -46,14 +41,14 @@ const TagItemCard = styled(Grid)(({ isActive }: any) => (`
     font-weight: 700;
   }
 `))
-const IconWrapper = styled(Box)(() => (`
+const IconWrapper = styled(Box)(({ bg }: any) => (`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: #FF7575;
+  background-color: ${bg ?? '#FF7575'};
 `))
 const Button = styled(MuiButton)(() => (`
   &&& {
@@ -64,8 +59,21 @@ const Button = styled(MuiButton)(() => (`
   }
 `))
 
-const ModalSelectTag = ({ open, handleClose }: PropTypes) => {
+interface PropTypes {
+  open: boolean
+  tags?: Array<any>
+  handleClose: () => void
+  onSelect: (value: any) => void
+}
+
+const ModalSelectTag = ({ open, handleClose, tags, onSelect }: PropTypes) => {
   const [active, setActive] = useState<any>(null)
+  const [selected, setSelected] = useState<any>(null)
+
+  const handleSubmitSelect = () => {
+    onSelect(selected)
+    handleClose()
+  }
   
   return (
     <Modal open={open} onClose={handleClose}>
@@ -75,14 +83,27 @@ const ModalSelectTag = ({ open, handleClose }: PropTypes) => {
             <ModalTitle>
               Pilih Tag
             </ModalTitle>
-            <Grid mb="32px" container direction="column" sx={{ rowGap: '12px' }}>
-              {[...Array(5)].map((_, i) => (
-                <TagItemCard onClick={() => setActive(i)} isActive={active === i} key={i} container alignItems="center">
-                  <IconWrapper>
+            <Grid
+              mb="32px"
+              container
+              direction="column"
+              sx={{ rowGap: '12px' }}
+            >
+              {tags && tags.map((tag, i) => (
+                <TagItemCard 
+                  onClick={() => {
+                    setActive(i)
+                    setSelected(tag)
+                  }}
+                  isActive={selected?.id === tag.id}
+                  key={i}
+                  container alignItems="center"
+                >
+                  <IconWrapper bg={tag.color}>
                     <Bill sx={{ fontSize: '16px' }} />
                   </IconWrapper>
                   <Grid item xs className="text">
-                    Tag 1
+                    {tag.name}
                   </Grid>
                   {active === i && (
                     <Checklist />
@@ -90,7 +111,13 @@ const ModalSelectTag = ({ open, handleClose }: PropTypes) => {
                 </TagItemCard>
               ))}
             </Grid>
-            <Button variant="contained" color="primary" fullWidth disableElevation>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              disableElevation
+              onClick={handleSubmitSelect}
+            >
               Pilih Tag
             </Button>
           </ModalBox>

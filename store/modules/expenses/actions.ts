@@ -28,12 +28,21 @@ function getSummaryExpenses() {
   }
 }
 
+function postExpenseData(value: any, callback?: () => void) {
+  return {
+    type: saga.POST_EXPENSE,
+    value,
+    callback,
+  }
+}
+
 const actions: Object = {
   expenses: {
     getExpenses,
     getTags,
     getSummaryExpenses,
     getDetailTag,
+    postExpenseData,
   }
 }
 

@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton'
 import Bill from 'components/icons/Bill'
 import MuiButton from '@mui/material/Button'
 import Slide from '@mui/material/Slide';
+import { parseCurrency } from 'services/helper-client'
 
 const Container = styled(Box)(() => (`
   &:focus-visible {
@@ -79,14 +80,14 @@ const Input = styled.input(({ width }) => (`
   }
   width: ${width ?? '100%'};
 `))
-const IconWrapper = styled(Box)(() => (`
+const IconWrapper = styled(Box)(({ bg }: any) => (`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background-color: #FF7575;
+  background-color: ${bg ?? '#FF7575'};
 `))
 const Button = styled(MuiButton)(() => (`
   &&& {
@@ -102,10 +103,21 @@ interface PropTypes {
   open: boolean
   handleClose: () => void
   selectTag: () => void
+  selectedTag: any
+  payload: any
+  mutatePayload: (key: string, value: any) => void
+  submit: () => void
 }
 
-const ModalAddExpend = ({ open, handleClose, selectTag }: PropTypes) => {
-  const [number, setNumber] = useState(0)
+const ModalAddExpend = ({ 
+  open,
+  payload,
+  selectedTag,
+  handleClose,
+  selectTag,
+  mutatePayload,
+  submit,
+}: PropTypes) => {
   const [bodyWidth, setBodyWidth] = useState<any>(null)
 
   useEffect(() => {
@@ -116,7 +128,10 @@ const ModalAddExpend = ({ open, handleClose, selectTag }: PropTypes) => {
     <Modal open={open} onClose={handleClose}>
       <Slide direction="up" mountOnEnter unmountOnExit in={open}>
         <Container onClick={handleClose}>
-            <ModalBox width={bodyWidth}>
+            <ModalBox 
+              width={bodyWidth}
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="topLine"></div>
               <Grid container alignItems="center" mb="24px">
                 <IconButton onClick={handleClose}>
@@ -125,23 +140,48 @@ const ModalAddExpend = ({ open, handleClose, selectTag }: PropTypes) => {
                     sx={{ width: 16, height: 16 }}
                   />
                 </IconButton>
-                <TopBarTitle style={{ color: '#484848', marginLeft: '12px' }}>
+                <TopBarTitle 
+                  style={{ color: '#484848', marginLeft: '12px' }}
+                >
                   Tambah Pengeluaran
                 </TopBarTitle>
               </Grid>
               <InputWrapper mb="12px">
                 <Box mr="8px">Rp</Box>
-                <input value={number} onChange={({ target: { value } }) => setNumber(parseInt(value))} type="number" />
+                <input 
+                  value={parseCurrency(payload.value)}
+                  onChange={
+                    ({ target: { value } }) => 
+                    mutatePayload(
+                      'value',
+                      value.trim().length > 0
+                        ? parseInt(value.replace(/[^0-9]/g, ''))
+                        : 0
+                    )} 
+                  type='text'
+                />
               </InputWrapper>
               <Grid container alignItems='center' justifyContent='end' mb="12px">
-                <IconWrapper mr="14px" onClick={selectTag}>
+                <IconWrapper bg={selectedTag?.color} mr="14px" onClick={selectTag}>
                   <Bill sx={{ fontSize: '20px' }} />
                 </IconWrapper>
-                <Input placeholder='Judul Pengeluaran' style={{ flex: 1 }} />
+                <Input
+                  value={payload.label}
+                  onChange={(e) => mutatePayload('label', e.target.value)}
+                  placeholder='Judul Pengeluaran'
+                  style={{ flex: 1 }}
+                />
               </Grid>
-              <Input placeholder='Tanggal' type="date" width="196px" style={{ marginLeft: 'auto' }} />
+              <Input
+                value={payload.date}
+                onChange={(e) => mutatePayload('date', e.target.value)}
+                placeholder='Tanggal'
+                type="date"
+                width="196px"
+                style={{ marginLeft: 'auto' }}
+              />
               <Box mt="28px">
-                <Button disableElevation fullWidth variant="contained">
+                <Button onClick={submit} disableElevation fullWidth variant="contained">
                   Catat Pengeluaran
                 </Button>
               </Box>

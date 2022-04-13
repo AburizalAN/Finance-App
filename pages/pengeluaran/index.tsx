@@ -23,10 +23,12 @@ const Pengeluaran: NextPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const { summary } = useSelector((state: any) => state.expenses)
+  const { tags: listTags } = useSelector((state: any) => state.expenses)
 
   const [showAddExpend, setShowAddExpend] = useState(false)
   const [showSelectTag, setShowSelectTag] = useState(false)
   const [tags, setTags] = useState([])
+  const [selectedTag, setSelectedTag] = useState<any>(null)
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [{
@@ -36,9 +38,44 @@ const Pengeluaran: NextPage = () => {
       borderWidth: 0,
     }],
   })
+  const [payload, setPayload] = useState<any>({
+    label: null,
+    tag: null,
+    date: null,
+    value: 0,
+  })
+
+  const mutatePayload = (key: string, value: any) => {
+    setPayload((prev: any) => ({
+      ...prev,
+      [key]: value
+    }))
+  }
+
+  const resetState = () => {
+    setPayload({
+      label: null,
+      tag: null,
+      date: null,
+      value: 0,
+    })
+    setSelectedTag(null)
+  }
+
+  const handleCloseAddExpend = () => {
+    setShowAddExpend(false)
+    resetState()
+  }
+
+  const submitExpense = () => {
+    dispatch(ACTIONS.expenses.postExpenseData(payload, () => {
+      window.location.reload()
+    }))
+  }
 
   useEffect(() => {
     dispatch(ACTIONS.expenses.getSummaryExpenses())
+    dispatch(ACTIONS.expenses.getTags())
   }, [])
 
   const total = summary.find((item: any) => item.id === 'total')
@@ -67,6 +104,12 @@ const Pengeluaran: NextPage = () => {
     setTags(_tags)
   }, [summary])
 
+  useEffect(() => {
+    if (selectedTag) {
+      mutatePayload('tag', selectedTag.id)
+    }
+  }, [selectedTag])
+
   return (
     <Box px="12px" sx={{ minHeight: "100vh", position: 'relative' }}>
       <TopBar backAction={() => router.push('/')} title="Pengeluaran" />
@@ -87,7 +130,13 @@ const Pengeluaran: NextPage = () => {
         </Box>
         <PieChart value={total && total.count} data={chartData} />
       </Box>
-      <Grid mt="30px" mb="12px" container justifyContent="end" alignItems="center">
+      <Grid 
+        mt="30px"
+        mb="12px"
+        container
+        justifyContent="end"
+        alignItems="center"
+      >
         <IconButton>
           <Filter mb="12px" sx={{ fontSize: '24px' }}/>
         </IconButton>
@@ -125,7 +174,10 @@ const Pengeluaran: NextPage = () => {
                 <Box sx={{ flex: 1 }}>
                   <h5>{tag.name}</h5>
                   <Box mt="8px">
-                    <ThisLinearProgress variant="determinate" value={tag.count / total.count * 100} />
+                    <ThisLinearProgress
+                      variant="determinate"
+                      value={tag.count / total.count * 100}
+                    />
                   </Box>
                 </Box>
                 <IconButton>
@@ -141,10 +193,19 @@ const Pengeluaran: NextPage = () => {
       </ThisAddButton>
       <ModalAddExpend 
         open={showAddExpend}
-        handleClose={() => setShowAddExpend(false)}
+        handleClose={handleCloseAddExpend}
         selectTag={() => setShowSelectTag(true)}
+        selectedTag={selectedTag}
+        payload={payload}
+        submit={submitExpense}
+        mutatePayload={mutatePayload}
       />
-      <ModalSelectTag open={showSelectTag} handleClose={() => setShowSelectTag(false)}/>
+      <ModalSelectTag
+        tags={listTags}
+        open={showSelectTag}
+        onSelect={(value: any) => setSelectedTag(value)}
+        handleClose={() => setShowSelectTag(false)}
+      />
     </Box>
   )
 }

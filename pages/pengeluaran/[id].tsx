@@ -64,7 +64,7 @@ const DetailPengeluaran: NextPage = () => {
           <IconHeader sx={{ backgroundColor: tag && tag.color }}>
             <Bill sx={{ fontSize: '24px' }} />
           </IconHeader>
-          <TitleHeader>{tag && tag.name}</TitleHeader>
+          <TitleHeader>{tag && tag.name ? tag.name : 'Total'}</TitleHeader>
         </Box>
       </Header>
       {/* Bagian isi */}
@@ -79,7 +79,7 @@ const DetailPengeluaran: NextPage = () => {
                   <div className="label">{item.label}</div>
                   <div className="date">{moment(item.date).format('DD MMMM YYYY')}</div>
                 </div>
-                <div className="price">+Rp{parseCurrency(item.value)}</div>
+                <div className="price">-Rp{parseCurrency(item.value)}</div>
               </ThisTransactionItem>
             </Box>
           </Box>
