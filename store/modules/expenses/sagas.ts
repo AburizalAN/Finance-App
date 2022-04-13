@@ -10,10 +10,10 @@ interface ResponseGenerator {
   data?: any
 }
 
-export function* getExpenses() {
+export function* getExpenses({ id = null }: { id?: any }) {
   try {
     yield put({ type: redux.GET_EXPENSES_LOADING })
-    let res: ResponseGenerator = yield call(SERVICES.getExpenses)
+    let res: ResponseGenerator = yield call(SERVICES.getExpenses, id)
 
     if (res.status !== 200) throw res.data.error
 
@@ -42,6 +42,22 @@ export function* getTags() {
   }
 }
 
+export function* getDetailTag({ tagId }: {tagId: string}) {
+  try {
+    yield put({ type: redux.GET_DETAIL_TAG_LOADING })
+    let res: ResponseGenerator = yield call(SERVICES.getDetailTag, tagId)
+  
+    if (res.status !== 200) throw res.data.error
+
+    const { data } = res
+    const payload = data
+
+    yield put({ type: redux.GET_DETAIL_TAG_SUCCESS, payload })
+  } catch (err) {
+    yield put({ type: redux.GET_DETAIL_TAG_FAILURE, payload: err })
+  }
+}
+
 export function* getSummaryExpenses() {
   try {
     yield put ({ type: redux.GET_SUMMARY_LOADING })
@@ -61,9 +77,10 @@ export function* getSummaryExpenses() {
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function* () {
   yield all([
-    takeEvery(saga.GET_EXPENSES, getExpenses),
+    takeEvery(saga.GET_EXPENSES, (props: any) => getExpenses(props)),
     takeEvery(saga.GET_TAGS, getTags),
     takeEvery(saga.GET_SUMMARY, getSummaryExpenses),
+    takeEvery(saga.GET_DETAIL_TAG, (props: any) => getDetailTag(props)),
   ])
 }
 

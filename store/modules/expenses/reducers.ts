@@ -8,6 +8,7 @@ const initialState = {
   expenses: [],
   summary: [],
   tags: [],
+  tag: {},
   error: null,
 }
 
@@ -31,6 +32,14 @@ const expenses = (state = initialState, action: any) => {
         tags: action.payload,
         error: null,
       }
+    
+    case redux.GET_DETAIL_TAG_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        tag: action.payload,
+        error: null,
+      }
 
     case redux.GET_SUMMARY_SUCCESS:
       return {
@@ -41,6 +50,7 @@ const expenses = (state = initialState, action: any) => {
       }
 
     case redux.GET_SUMMARY_FAILURE:
+    case redux.GET_DETAIL_TAG_FAILURE:
     case redux.GET_TAGS_FAILURE:
     case redux.GET_EXPENSES_FAILURE:
       return {
@@ -50,6 +60,7 @@ const expenses = (state = initialState, action: any) => {
       }
 
     case redux.GET_SUMMARY_LOADING:
+    case redux.GET_DETAIL_TAG_LOADING:
     case redux.GET_TAGS_LOADING:
     case redux.GET_EXPENSES_LOADING:
       return {

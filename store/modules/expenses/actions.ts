@@ -2,15 +2,23 @@ import types from './types'
 
 const { redux, saga } = types
 
-function getExpenses() {
+function getExpenses(id?: any) {
   return {
-    type: saga.GET_EXPENSES
+    type: saga.GET_EXPENSES,
+    id,
   }
 }
 
 function getTags() {
   return {
     type: saga.GET_TAGS
+  }
+}
+
+function getDetailTag(tagId: string) {
+  return {
+    type: saga.GET_DETAIL_TAG,
+    tagId,
   }
 }
 
@@ -25,6 +33,7 @@ const actions: Object = {
     getExpenses,
     getTags,
     getSummaryExpenses,
+    getDetailTag,
   }
 }
 

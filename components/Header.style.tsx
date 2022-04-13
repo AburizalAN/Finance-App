@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 export const Header = styled(Box)(({ pt, bg }: any) => `
   padding: 12px;
   padding-top: ${pt ?? 'inherit'};
-  background-color: ${bg ?? '#5DB4A4'};
+  background-color: ${bg ?? '#7C58AA'};
   h1 {
     color: #fff;
   }

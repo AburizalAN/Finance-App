@@ -5,6 +5,7 @@ import ArrowLeft from 'components/icons/ArrowLeft'
 import { useRouter } from 'next/router'
 
 interface PropTypes {
+  backAction?: any
   rightContent?: ReactNode
   title?: string
   variant?: string
@@ -30,12 +31,17 @@ export const TopBarTitle = styled.div`
   margin-right: auto;
 `
 
-const TopBar = ({ title = 'title', rightContent = null, variant = 'light' }: PropTypes) => {
+const TopBar = ({ 
+  backAction = null,
+  title = 'title',
+  rightContent = null,
+  variant = 'light'
+}: PropTypes) => {
   const router = useRouter()
 
   return (
     <Container>
-      <IconButton onClick={() => router.back()} sx={{ marginRight: '12px' }}>
+      <IconButton onClick={backAction ? backAction : () => router.back()} sx={{ marginRight: '12px' }}>
         <ArrowLeft 
           fill={variant === 'light' ? '#484848' : variant === 'dark' ? 'white' : null } 
           sx={{ width: 16, height: 16 }}

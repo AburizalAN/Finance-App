@@ -14,18 +14,20 @@ import Link from 'next/link'
 import { ThisCard, ThisAddButton, ThisLinearProgress } from 'components/screens/pengeluaran.style'
 import ModalAddExpend from 'components/ModalAddExpend'
 import ModalSelectTag from 'components/ModalSelectTag'
+import { useRouter } from 'next/router'
 
 import { useSelector, useDispatch } from 'react-redux'
 import ACTIONS from 'store/registerActions'
 
 const Pengeluaran: NextPage = () => {
   const dispatch = useDispatch()
+  const router = useRouter()
   const { summary } = useSelector((state: any) => state.expenses)
 
   const [showAddExpend, setShowAddExpend] = useState(false)
   const [showSelectTag, setShowSelectTag] = useState(false)
   const [tags, setTags] = useState([])
-  const [chartData, setChartData] = useState<any>({
+  const [chartData, setChartData] = useState({
     labels: [],
     datasets: [{
       label: '# of Votes',
@@ -42,26 +44,32 @@ const Pengeluaran: NextPage = () => {
   const total = summary.find((item: any) => item.id === 'total')
 
   useEffect(() => {
+    let labels: Array<string> = []
+    let data: Array<any> = []
+    let backgroundColor: Array<string> = []
     const _tags = summary.filter((item: any) => {
       if (item.id !== 'total' && item.count > 0) {
-        setChartData((prev: any) => ({
-          ...prev,
-          labels: [...prev.labels, item.name],
-          datasets: [{
-            ...prev.datasets[0],
-            data: [ ...prev.datasets[0].data, item.count ],
-            backgroundColor: [ ...prev.datasets[0].backgroundColor, item.color ],
-          }]
-        }))
+        labels = [...labels, item.name]
+        data = [ ...data, item.count ]
+        backgroundColor = [ ...backgroundColor, item.color ]
         return item
       }
     })
+    setChartData((prev: any) => ({
+      ...prev,
+      labels,
+      datasets: [{
+        ...prev.datasets[0],
+        data,
+        backgroundColor,
+      }]
+    }))
     setTags(_tags)
   }, [summary])
 
   return (
     <Box px="12px" sx={{ minHeight: "100vh", position: 'relative' }}>
-      <TopBar title="Pengeluaran" />
+      <TopBar backAction={() => router.push('/')} title="Pengeluaran" />
       <Box pt="58px" sx={{ display: 'flex', justifyContent: 'center' }}>
         <FilterDate />
       </Box>
@@ -85,7 +93,7 @@ const Pengeluaran: NextPage = () => {
         </IconButton>
       </Grid>
       <Grid container direction="column" sx={{ rowGap: '12px' }}>
-        <Link href="/pengeluaran/12" passHref>
+        <Link href={`/pengeluaran/${total && total.id}`} passHref>
           <Grid item xs="auto">
             <ThisCard>
               <div className="icon">
@@ -104,7 +112,7 @@ const Pengeluaran: NextPage = () => {
           </Grid>
         </Link>
         {tags.map((tag: any, i: number) => (
-          <Link key={i} href="/pengeluaran/12" passHref>
+          <Link key={i} href={`/pengeluaran/${tag.id}`} passHref>
             <Grid item xs="auto">
               <ThisCard>
                 <div className="icon" 

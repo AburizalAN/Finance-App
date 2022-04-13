@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { TopBarTitle } from 'components/TopBar'
 import Modal from '@mui/material/Modal'
 import ArrowLeft from 'components/icons/ArrowLeft'
@@ -21,12 +21,14 @@ const Container = styled(Box)(() => (`
   outline: none;
   border: none;
 `))
-const ModalBox = styled(Box)(() => (`
+const ModalBox = styled(Box)(({ width }) => (`
   background-color: #fff;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   padding: 12px;
   font-size: 13px;
+  width: ${width ? `${width}px` : 'auto'};
+  margin: auto;
   .topLine {
     background: #4848484D;
     width: 69px;
@@ -104,12 +106,17 @@ interface PropTypes {
 
 const ModalAddExpend = ({ open, handleClose, selectTag }: PropTypes) => {
   const [number, setNumber] = useState(0)
+  const [bodyWidth, setBodyWidth] = useState<any>(null)
+
+  useEffect(() => {
+    if (window) setBodyWidth(document.body.clientWidth)
+  }, [])
 
   return (
     <Modal open={open} onClose={handleClose}>
       <Slide direction="up" mountOnEnter unmountOnExit in={open}>
-        <Container>
-            <ModalBox>
+        <Container onClick={handleClose}>
+            <ModalBox width={bodyWidth}>
               <div className="topLine"></div>
               <Grid container alignItems="center" mb="24px">
                 <IconButton onClick={handleClose}>

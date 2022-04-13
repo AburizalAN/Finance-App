@@ -9,6 +9,12 @@ import FilterSection from 'components/FilterSection'
 import TopBar from 'components/TopBar'
 import { DateTitle, TransactionItem, BottomFixSection, BottomFixButton } from 'components/screens/pemasukan.style'
 import { Header, TitleHeader, Image } from 'components/Header.style'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import ACTIONS from 'store/registerActions'
+import { useRouter } from 'next/router'
+import { parseCurrency } from 'services/helper-client'
+import moment from 'moment'
 
 const IconHeader = styled(Box)`
   margin: auto;
@@ -27,6 +33,18 @@ const ThisTransactionItem = styled(TransactionItem)`
 `
 
 const DetailPengeluaran: NextPage = () => {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const { expenses, tag } = useSelector((state: any) => state.expenses)
+  const { id = null } = router.query
+
+  useEffect(() => {
+    if (id) {
+      dispatch(ACTIONS.expenses.getDetailTag(id))
+      dispatch(ACTIONS.expenses.getExpenses(id))
+    }
+  }, [id])
+
   return (
     <Box
       sx={{
@@ -34,7 +52,8 @@ const DetailPengeluaran: NextPage = () => {
         display: 'flex',
         flexDirection: 'column',
       }}>
-      <TopBar 
+      <TopBar
+        backAction={() => router.push('/pengeluaran')}
         title="List Pengeluaran"
         variant="dark"
         rightContent={<SelectDropdown />}
@@ -42,32 +61,25 @@ const DetailPengeluaran: NextPage = () => {
       {/* Bagian Header */}
       <Header pt="59.719px" bg="#FF7575">
         <Box mt="24px">
-          <IconHeader>
+          <IconHeader sx={{ backgroundColor: tag && tag.color }}>
             <Bill sx={{ fontSize: '24px' }} />
           </IconHeader>
-          <TitleHeader>Tabungan Hari Tua</TitleHeader>
+          <TitleHeader>{tag && tag.name}</TitleHeader>
         </Box>
       </Header>
       {/* Bagian isi */}
       <Box p="12px" sx={{ flex: 1, overflow: 'auto' }}>
         <FilterSection />
-        {[...Array(10)].map((item, i) => (
+        {expenses && expenses.map((item: any, i: number) => (
           <Box key={i} mt="24px">
-            <DateTitle>10 Maret 2010</DateTitle>
+            {/* <DateTitle>10 Maret 2010</DateTitle> */}
             <Box>
               <ThisTransactionItem>
                 <div>
-                  <div className="label">Bayar listrik</div>
-                  <div className="date">10 Maret 2022</div>
+                  <div className="label">{item.label}</div>
+                  <div className="date">{moment(item.date).format('DD MMMM YYYY')}</div>
                 </div>
-                <div className="price">+Rp200.000</div>
-              </ThisTransactionItem>
-              <ThisTransactionItem>
-                <div>
-                  <div className="label">Bayar listrik</div>
-                  <div className="date">10 Maret 2022</div>
-                </div>
-                <div className="price">+Rp200.000</div>
+                <div className="price">+Rp{parseCurrency(item.value)}</div>
               </ThisTransactionItem>
             </Box>
           </Box>
