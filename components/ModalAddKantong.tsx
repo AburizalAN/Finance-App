@@ -6,23 +6,30 @@ import { TopBarTitle } from 'components/TopBar'
 import { parseCurrency } from 'services/helper-client'
 import Box from '@mui/material/Box'
 import styled from '@emotion/styled'
-import { InputWrapper, Input, IconWrapper, Button } from 'components/screens/global.style'
+import { InputWrapper, Input, IconWrapper, Button, Typography } from 'components/screens/global.style'
+import CustomDropdown from "components/CustomDropdown"
+import { useEffect } from 'react'
 
 interface PropTypes {
   open: boolean
   handleClose: () => void
 }
 
-const ThisInput = styled(Input)({
+const ThisInputWrapper = styled(InputWrapper)({
   borderColor: '#5DB4A4 !important',
   color: '#338379',
   backgroundColor: '#5DB4A410',
-  '&::placeholder': {
+  '& input::placeholder': {
     color: '#33837980',
+  },
+  '*': {
+    fontSize: '13px',
+    color: '#338379',
   },
 })
 
 const ModalAddKantong = ({ open, handleClose }: PropTypes) => {
+   
   return (
     <ModalBottomWrapper open={open} handleClose={handleClose}>
       <Grid container alignItems="center" mb="24px">
@@ -38,9 +45,25 @@ const ModalAddKantong = ({ open, handleClose }: PropTypes) => {
           Tambah Kantong Baru
         </TopBarTitle>
       </Grid>
-      <ThisInput
-        placeholder="test"
-      />
+      <Grid container rowGap="12px" direction="column">
+        <ThisInputWrapper>
+          <input
+            placeholder="Nama Kantong"
+            onChange={() => {}} 
+            type='text'
+          />
+        </ThisInputWrapper>
+        <ThisInputWrapper>
+          <CustomDropdown
+            inputDisabled
+            value={'Pilih Kategory'}
+            list={['tabungan', 'investasi']}
+            sx={{
+              padding: 0,
+            }}
+          />
+        </ThisInputWrapper>
+      </Grid>
     </ModalBottomWrapper>
   )
 }

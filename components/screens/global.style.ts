@@ -16,19 +16,21 @@ const InputStyle = `
 `
 export const InputWrapper = styled(Box)(() => (`
   ${InputStyle}
+  column-gap: 12px;
   * {
     font-size: 18px;
     font-weight: 700;
     line-height: 24.55px;
-    color: '#6B518B';
+    color: #6B518B;
     &:focus-visible {
       outline: none;
     }
   }
   input {
-    width: 100%;
+    flex: 1;
     padding: 0;
     border: none;
+    background-color: transparent;
   }
 `))
 export const Input = styled.input(({ width }: any) => ({
@@ -61,3 +63,42 @@ export const Button = styled(MuiButton)(() => (`
     padding: 12px;
   }
 `))
+
+interface TypographyProps {
+  color?: string
+  fontSize?: string
+  weight?: string
+  lineHeight?: string
+  variant?: string
+}
+
+export const Typography = styled(Box)(
+  ({ weight, fontSize, color, lineHeight, variant = 'small' }: TypographyProps) => {
+    const globalStyles = {
+      color:
+        color === 'secondary'
+          ? '#6f6f6f'
+          : color === 'primary'
+          ? '#484848'
+          : color
+          ? color
+          : '#484848',
+      fontWeight: weight || 'normal',
+    };
+
+    switch (variant) {
+      case 'medium':
+        return {
+          ...globalStyles,
+          fontSize: fontSize || '15px',
+          lineHeight: lineHeight || '20.46px',
+        };
+      case 'small':
+        return {
+          ...globalStyles,
+          fontSize: fontSize || '13px',
+          lineHeight: lineHeight || '17.73px',
+        };
+    }
+  }
+);
