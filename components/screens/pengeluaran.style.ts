@@ -23,6 +23,7 @@ export const ThisCard = styled(Card)`
   }
 `
 export const ThisAddButton = styled(AddButton)`
+  position: fixed;
   transform: none;
   bottom: 12px;
   right: 12px;

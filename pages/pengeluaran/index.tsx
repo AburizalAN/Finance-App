@@ -114,7 +114,7 @@ const Pengeluaran: NextPage = () => {
   }, [selectedTag])
 
   return (
-    <Box px="12px" sx={{ minHeight: "100vh", position: 'relative' }}>
+    <Box px="12px" pb="24px" sx={{ minHeight: "100vh", position: 'relative' }}>
       <TopBar backAction={() => router.push('/')} title="Pengeluaran" />
       <Box pt="58px" sx={{ display: 'flex', justifyContent: 'center' }}>
         <FilterDate />

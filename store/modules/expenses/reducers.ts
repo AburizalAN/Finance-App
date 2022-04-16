@@ -69,7 +69,6 @@ const expenses = (state = initialState, action: any) => {
         error: action.payload,
       }
 
-    case redux.POST_EXPENSE_SUCCESS:
     case redux.GET_SUMMARY_LOADING:
     case redux.GET_DETAIL_TAG_LOADING:
     case redux.GET_TAGS_LOADING:

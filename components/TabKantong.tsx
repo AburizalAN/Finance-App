@@ -8,6 +8,7 @@ import { SliderGrid, AddButton } from 'components/style'
 import CardKantong from 'components/CardKantong'
 import AddIcon from 'components/icons/AddIcon'
 import Link from 'next/link'
+import ModalAddKantong from 'components/ModalAddKantong'
 
 const Container = styled.div`
   margin-top: 62px;
@@ -45,6 +46,9 @@ const tabItems: Array<TabItem> = [
 
 const TabPanel = (props: TabPanelProps) => {
   const { children, index, value } = props
+
+  
+
   return (
     <Box mx="-12px" hidden={index !== value}>
       <SliderGrid columnSpacing="12px" px="12px">
@@ -62,6 +66,7 @@ const TabPanel = (props: TabPanelProps) => {
 
 const TabKantong = () => {
   const [value, setValue] = useState(0);
+  const [showAddKantong, setShowAddKantong] = useState(false)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue)
@@ -85,9 +90,10 @@ const TabKantong = () => {
       <TabPanel value={value} index={2}>
         Item Three
       </TabPanel>
-      <AddButton>
+      <AddButton onClick={() => setShowAddKantong(true)}>
         <AddIcon />
       </AddButton>
+      <ModalAddKantong open={showAddKantong} handleClose={() => setShowAddKantong(false)} />
     </Container>
   )
 }
