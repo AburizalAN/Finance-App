@@ -10,24 +10,26 @@ import FilterSection from 'components/FilterSection'
 import TopBar from 'components/TopBar'
 import { DateTitle, TransactionItem, BottomFixSection, BottomFixButton } from 'components/screens/pemasukan.style'
 import { Header, TitleHeader, Image } from 'components/Header.style'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ACTIONS from 'store/registerActions'
+import { parseCurrency } from 'services/helper-client'
+import moment from 'moment'
+import ModalAddIncomes from 'components/ModalAddIncomes'
 
 const Pemasukan: NextPage = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { incomes } = useSelector((state: any) => state.incomes)
-
   const { id = null } = router.query
+
+  const [showAddIncomes, setShowAddIncomes] = useState(false)
 
   useEffect(() => {
     if (id) {
       dispatch(ACTIONS.incomes.getIncomes(id !== 'all' ? id : null))
     }
   }, [id])
-
-  console.log('incomes', incomes)
 
   return (
     <Box
@@ -36,42 +38,34 @@ const Pemasukan: NextPage = () => {
         display: 'flex',
         flexDirection: 'column',
       }}>
-      <TopBar 
+      <TopBar
+        backAction={() => router.push('/')}
         title="List Pemasukan"
         variant="dark"
         rightContent={<SelectDropdown />}
       />
       {/* Bagian Header */}
-      <Header pt="59.719px">
+      <Header bg="#5DB4A4" pt="59.719px">
         <Box mt="24px">
           <Image src="/money-bag.png" alt="money bag" />
-          <TitleHeader>Tabungan Hari Tua</TitleHeader>
+          <TitleHeader>{incomes[0]?.kantong?.name}</TitleHeader>
         </Box>
       </Header>
       {/* Bagian isi */}
       <Box p="12px" mb="78px" sx={{ flex: 1, overflow: 'auto' }}>
         <FilterSection />
-        {[...Array(10)].map((item, i) => (
-          <Box key={i} mt="24px">
-            <DateTitle>10 Maret 2010</DateTitle>
-            <Box>
-              <TransactionItem>
-                <div>
-                  <div className="label">Bayar listrik</div>
-                  <div className="date">10 Maret 2022</div>
-                </div>
-                <div className="price">+Rp200.000</div>
-              </TransactionItem>
-              <TransactionItem>
-                <div>
-                  <div className="label">Bayar listrik</div>
-                  <div className="date">10 Maret 2022</div>
-                </div>
-                <div className="price">+Rp200.000</div>
-              </TransactionItem>
-            </Box>
-          </Box>
-        ))}
+        <Box mt="24px">
+          {/* <DateTitle>10 Maret 2010</DateTitle> */}
+          {incomes && incomes.map((item: any, i: number) => (
+            <TransactionItem key={i}>
+              <div>
+                <div className="label">{item.from}</div>
+                <div className="date">{moment(item.date).format('DD MMMM YYYY')}</div>
+              </div>
+              <div className="price">+Rp{parseCurrency(item.value)}</div>
+            </TransactionItem>
+          ))}
+        </Box>
       </Box>
       {/* Bagian Bottom Navigation */}
       <BottomFixSection bg="#fcfcfc">
@@ -80,10 +74,12 @@ const Pemasukan: NextPage = () => {
           fullWidth
           color="success"
           startIcon={<AddIcon />}
+          onClick={() => setShowAddIncomes(true)}
         >
           Tambah Pemasukan Baru
         </BottomFixButton>
       </BottomFixSection>
+      <ModalAddIncomes open={showAddIncomes} handleClose={() => setShowAddIncomes(false)} />
     </Box>
   )
 }

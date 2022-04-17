@@ -19,6 +19,7 @@ const Home: NextPage = () => {
   }, [])
 
   const listKantong = summaryIncomes.filter((item: any) => item.id !== 'total')
+  const totalSaldo = summaryIncomes.find((item: any) => item.id === 'total')
 
   return (
     <Box pt="24px" pb="72px" px="12px" sx={{ minHeight: "100vh", position: 'relative' }}>
@@ -32,7 +33,7 @@ const Home: NextPage = () => {
         <h3>My Finance Application</h3>
       </AppTitle>
 
-      <TotalSaldoComponent />
+      <TotalSaldoComponent data={totalSaldo} />
       <TabKantong list={listKantong} />
       <BannerPengeluaran />
     </Box>
