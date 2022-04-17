@@ -5,8 +5,21 @@ import TotalSaldoComponent from 'components/TotalSaldoComponent'
 import Box from '@mui/material/Box'
 import TabKantong from 'components/TabKantong'
 import BannerPengeluaran from 'components/BannerPengeluaran'
+import { useEffect } from 'react'
+import ACTIONS from 'store/registerActions'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Home: NextPage = () => {
+  const dispatch = useDispatch()
+  const { summaryIncomes } = useSelector((state: any) => state.incomes)
+
+
+  useEffect(() => {
+    dispatch(ACTIONS.incomes.getSummaryIncomes())
+  }, [])
+
+  const listKantong = summaryIncomes.filter((item: any) => item.id !== 'total')
+
   return (
     <Box pt="24px" pb="72px" px="12px" sx={{ minHeight: "100vh", position: 'relative' }}>
       <Head>
@@ -20,7 +33,7 @@ const Home: NextPage = () => {
       </AppTitle>
 
       <TotalSaldoComponent />
-      <TabKantong />
+      <TabKantong list={listKantong} />
       <BannerPengeluaran />
     </Box>
   )

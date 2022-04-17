@@ -21,7 +21,9 @@ export default async function handler(
   if (method === 'GET') {
     try {
       let collection: any[] = []
-      const snapshot = await incomesRef.get()
+      const snapshot = kantong === null 
+        ? await incomesRef.get() 
+        : await incomesRef.where('kantong.id', '==', kantong).get()
       snapshot.forEach((doc: any) => {
         collection.push({
           id: doc.id,

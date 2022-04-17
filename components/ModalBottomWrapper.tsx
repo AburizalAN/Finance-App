@@ -54,7 +54,7 @@ const ModalBottomWrapper = ({ children, open, handleClose }: PropTypes) => {
         mountOnEnter
         unmountOnExit
       >
-        <Container>
+        <Container onClick={handleClose}>
           <ModalBox
             width={bodyWidth}
             onClick={(e) => e.stopPropagation()}

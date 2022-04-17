@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 
-export const parseCurrency = (nmbr: number) => {
+export const parseCurrency = (nmbr: number = 0) => {
   return new Intl.NumberFormat('id').format(nmbr)
 }
 

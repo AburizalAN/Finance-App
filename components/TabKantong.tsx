@@ -28,9 +28,9 @@ const StyledTab = styled(Tab)`
 `
 
 interface TabPanelProps {
-  children?: ReactNode
   index: number
   value: number
+  list: Array<any>
 }
 
 interface TabItem {
@@ -45,17 +45,19 @@ const tabItems: Array<TabItem> = [
 ]
 
 const TabPanel = (props: TabPanelProps) => {
-  const { children, index, value } = props
-
-  
+  const { list, index, value } = props
 
   return (
     <Box mx="-12px" hidden={index !== value}>
       <SliderGrid columnSpacing="12px" px="12px">
-        {[...Array(4)].map((item, i: number) => (
-          <Link href={`/kantong/1`} key={i} passHref>
+        {list.map((item, i: number) => (
+          <Link href={`/kantong/${item.id}`} key={i} passHref>
             <Grid item>
-              <CardKantong />
+              <CardKantong
+                name={item.name}
+                amount={item.amount}
+                category={item.category}
+              />
             </Grid>
           </Link>
         ))}
@@ -64,13 +66,16 @@ const TabPanel = (props: TabPanelProps) => {
   )
 }
 
-const TabKantong = () => {
+const TabKantong = ({ list }: {list: Array<any>}) => {
   const [value, setValue] = useState(0);
   const [showAddKantong, setShowAddKantong] = useState(false)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
+
+  const listTabungan = list.filter((item: any) => item.category === 'tabungan')
+  const listInvestasi = list.filter((item: any) => item.category === 'investasi')
 
   return (
     <Container>
@@ -81,15 +86,9 @@ const TabKantong = () => {
           ))}
         </Tabs>
       </Box>
-      <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
+      <TabPanel list={list} value={value} index={0} />
+      <TabPanel list={listTabungan} value={value} index={1} />
+      <TabPanel list={listInvestasi} value={value} index={2} />
       <AddButton onClick={() => setShowAddKantong(true)}>
         <AddIcon />
       </AddButton>

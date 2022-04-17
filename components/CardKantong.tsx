@@ -1,5 +1,6 @@
 import { Card } from 'components/style'
 import styled from '@emotion/styled'
+import { parseCurrency } from 'services/helper-client'
 
 const ThisCard = styled(Card)`
   height: 100%;
@@ -27,14 +28,19 @@ const Desc = styled.div`
   color: #AEAEAE;
 `
 
+interface PropTypes {
+  name?: string
+  amount?: number
+  category?: string
+}
 
-const CardKantong = () => {
+const CardKantong = ({ name, amount, category }: PropTypes) => {
   return (
     <ThisCard padding="24px 12px" width="155px">
       <Image src="/money-bag.png" alt="money bag" />
-      <Title>Tabungan Hari Tua</Title>
-      <SubTitle>Rp100.000.000</SubTitle>
-      <Desc>Investasi</Desc>
+      <Title>{name ?? 'Nama Kantong'}</Title>
+      <SubTitle>{amount ? 'Rp ' + parseCurrency(amount) : 'Mulai Menabung'}</SubTitle>
+      <Desc>{category ?? 'Category'}</Desc>
     </ThisCard>
   )
 }

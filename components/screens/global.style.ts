@@ -2,39 +2,38 @@ import styled from '@emotion/styled'
 import Box from '@mui/material/Box'
 import MuiButton from '@mui/material/Button'
 
-const InputStyle = `
-  width: 100%;
-  border: 1px solid #7C58AA80;
-  padding: 12px 16px;
-  box-shadow: 0px 0px 20px 0px #7C58AA1A;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  &:focus-visible {
-    outline: none;
+const InputStyle = {
+  padding: '12px 16px',
+  border: '1px solid #7C58AA80',
+  boxShadow: '0px 0px 20px 0px #7C58AA1A',
+  borderRadius: '12px',
+  display: 'flex',
+  alignItems: 'center',
+  '&:focus-visible': {
+    outline: 'none',
   }
-`
-export const InputWrapper = styled(Box)(() => (`
-  ${InputStyle}
-  column-gap: 12px;
-  * {
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 24.55px;
-    color: #6B518B;
-    &:focus-visible {
-      outline: none;
+}
+export const InputWrapper = styled(Box)(() => ({
+  ...InputStyle,
+  columnGap: '12px',
+  '*': {
+    fontSize: '18px',
+    fontWeight: '700',
+    lineHeight: '24.55px',
+    color: '#6B518B',
+    '&:focus-visible': {
+      outline: 'none',
     }
+  },
+  'input': {
+    flex: '1',
+    padding: '0',
+    border: 'none',
+    backgroundColor: 'transparent',
   }
-  input {
-    flex: 1;
-    padding: 0;
-    border: none;
-    background-color: transparent;
-  }
-`))
+}))
 export const Input = styled.input(({ width }: any) => ({
-  InputStyle,
+  ...InputStyle,
   color: '#6B518B',
   backgroundColor: '#F6EFFC80',
   fontSize: '13px',
@@ -61,6 +60,9 @@ export const Button = styled(MuiButton)(() => (`
     background-color: #7C58AA;
     border-radius: 16px;
     padding: 12px;
+    &.Mui-disabled {
+      background-color: #eeeeee;
+    }
   }
 `))
 

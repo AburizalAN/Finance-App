@@ -46,9 +46,6 @@ export default async function handler(
 
         const summaryByKantongRef = db.collection('summary_incomes').doc(doc.id)
 
-        console.log('kantong', { kantongData, id: doc.id })
-        console.log('amount', {id: doc.id, amount})
-
         summaryByKantongRef.get().then(async (docSnapshot) => {
           if (docSnapshot.exists) {
             await db.runTransaction(async (t) => {
