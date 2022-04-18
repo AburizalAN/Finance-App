@@ -36,8 +36,9 @@ export const Input = styled.input(({ width }: any) => ({
   ...InputStyle,
   color: '#6B518B',
   backgroundColor: '#F6EFFC80',
-  fontSize: '13px',
+  fontSize: '15px',
   fontWeight: 700,
+  lineHeight: '20.46px',
   '&::placeholder': {
     color: '#00000050',
   },
@@ -75,7 +76,7 @@ interface TypographyProps {
 }
 
 export const Typography = styled(Box)(
-  ({ weight, fontSize, color, lineHeight, variant = 'small' }: TypographyProps) => {
+  ({ weight, fontSize, color, lineHeight, variant = 'medium' }: TypographyProps) => {
     const globalStyles = {
       color:
         color === 'secondary'

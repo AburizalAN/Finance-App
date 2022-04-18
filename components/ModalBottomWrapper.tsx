@@ -20,7 +20,7 @@ const ModalBox = styled(Box)(({ width }) => (`
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
   padding: 12px 12px 24px;
-  font-size: 13px;
+  font-size: 15px;
   width: ${width ? `${width}px` : 'auto'};
   margin: auto;
   .topLine {

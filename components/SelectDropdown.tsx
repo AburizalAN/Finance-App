@@ -12,9 +12,9 @@ const Container = styled.div`
   justify-content: space-between;
 `
 const Label = styled.div`
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 17.73px;
+  line-height: 20.46px;
   margin-right: 4px;
   color: white;
 `

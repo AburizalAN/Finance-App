@@ -19,7 +19,7 @@ export const ThisCard = styled(Card)`
     border-radius: 50%;
   }
   h5 {
-    font-size: 13px;
+    font-size: 15px;
   }
 `
 export const ThisAddButton = styled(AddButton)`

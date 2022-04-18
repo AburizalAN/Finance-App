@@ -21,9 +21,9 @@ const StyledTab = styled(Tab)`
   max-width: auto;
   text-transform: none;
   min-height: 0;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 17.73px;
+  line-height: 20.46px;
   color: #AEAEAE;
 `
 

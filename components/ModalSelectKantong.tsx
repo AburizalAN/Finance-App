@@ -23,7 +23,7 @@ const ModalBox = styled(Box)(() => (`
   padding: 16px;
 `))
 const ModalTitle = styled.div`
-  font-size: 13px;
+  font-size: 15px;
   line-height: 17.73px;
   font-weight: 700;
   margin-bottom: 22px;
@@ -36,7 +36,7 @@ const TagItemCard = styled(Grid)(({ isActive }: any) => (`
   padding: 12px;
   column-gap: 12px;
   .text {
-    font-size: 13px;
+    font-size: 15px;
     line-height: 1;
     font-weight: 700;
   }

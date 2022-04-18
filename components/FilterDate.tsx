@@ -5,9 +5,9 @@ const Container = styled(Box)`
   border: 1px solid #D1D1D1;
   border-radius: 12px;
   padding: 8px 16px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 17.73px;
+  line-height: 20.46px;
   display: flex;
   align-items: center;
   grid-column-gap: 8px;

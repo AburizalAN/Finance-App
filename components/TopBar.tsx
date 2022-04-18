@@ -24,7 +24,7 @@ export const Container = styled.div`
   padding: 12px;
 `
 export const TopBarTitle = styled.div`
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1;
   font-weight: 700;
   color: #fff;

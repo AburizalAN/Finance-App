@@ -3,8 +3,8 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 
 export const DateTitle = styled.div`
-  font-size: 13px;
-  line-height: 17.73px;
+  font-size: 15px;
+  line-height: 20.46px;
   font-weight: 700;
   color: #9F9F9F;
   text-transform: uppercase;
@@ -14,8 +14,8 @@ export const TransactionItem = styled.div`
   display: flex;
   align-items: start;
   justify-content: space-between;
-  font-size: 13px;
-  line-height: 17.73px;
+  font-size: 15px;
+  line-height: 20.46px;
   &:not(:last-child) {
     margin-bottom: 10px
   }
@@ -53,7 +53,7 @@ export const BottomFixButton = styled(Button)`
   border-radius: 8px;
   box-shadow: 0px 0px 20px 0px #7C58AA1A;
   color: #5DB4A4;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1;
   font-weight: 700;
   padding: 12px 18px;

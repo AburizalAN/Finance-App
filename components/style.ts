@@ -69,8 +69,8 @@ export const GreenBackground = styled.div`
   .left {
     flex: 1;
     h5 {
-      font-size: 13px;
-      line-height: 17.73px;
+      font-size: 15px;
+      line-height: 20.46px;
       font-weight: 700;
       margin-bottom: 8px;
     }

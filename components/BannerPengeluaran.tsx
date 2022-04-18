@@ -13,9 +13,9 @@ const Container = styled(Grid)`
 Container.defaultProps = { container: true }
 
 const SubTitle = styled.div`
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 17.73px;
+  line-height: 20.46px;
   color: #72558ECC;
   margin-bottom: 8px;
 `
