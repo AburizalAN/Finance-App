@@ -5,6 +5,11 @@ async function getIncomes(id?: string) {
   return res
 }
 
+async function addIncomes(payload: any) {
+  const res = await post('/api/incomes', payload)
+  return res
+}
+
 async function getSummaryIncomes() {
   const res = await get('/api/summary-incomes')
   return res
@@ -19,6 +24,7 @@ const services = {
   getIncomes,
   getSummaryIncomes,
   addKantong,
+  addIncomes,
 }
 
 export default services

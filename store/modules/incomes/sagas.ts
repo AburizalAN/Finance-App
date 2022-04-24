@@ -10,7 +10,10 @@ interface ResponseGenerator {
   data?: any
 }
 
-export function* addKantong({ formData }: { formData: any }) {
+export function* addKantong({
+  formData,
+  callback = () => {}
+}: { formData: any, callback?: () => void }) {
   try {
     yield put({ type: redux.POST_ADD_KANTONG_LOADING })
     let res: ResponseGenerator = yield call(SERVICES.addKantong, formData)
@@ -22,8 +25,30 @@ export function* addKantong({ formData }: { formData: any }) {
 
     console.log('success add kantong', payload)
     yield put({ type: redux.POST_ADD_KANTONG_SUCCESS })
+    callback()
   } catch (err) {
     yield put({ type: redux.POST_ADD_KANTONG_FAILURE, payload: err })
+  }
+}
+
+export function* addIncomes({
+  formData,
+  callback = () => {}
+}: { formData: any, callback?: () => void }) {
+  try {
+    yield put({ type: redux.POST_ADD_INCOMES_LOADING })
+    let res: ResponseGenerator = yield call(SERVICES.addIncomes, formData)
+
+    if (res.status !== 200) throw res.data.error
+
+    const { data } = res
+    const payload = data
+
+    console.log('success add incomes', payload)
+    yield put({ type: redux.POST_ADD_INCOMES_SUCCESS })
+    callback()
+  } catch (err) {
+    yield put({ type: redux.POST_ADD_INCOMES_FAILURE, payload: err })
   }
 }
 
@@ -65,5 +90,6 @@ export default function* () {
     takeEvery(saga.ADD_KANTONG, (props: any) => addKantong(props)),
     takeEvery(saga.GET_SUMMARY_INCOMES, () => getSummaryIncomes()),
     takeEvery(saga.GET_INCOMES, (props: any) => getIncomes(props)),
+    takeEvery(saga.ADD_INCOMES, (props: any) => addIncomes(props)),
   ])
 }

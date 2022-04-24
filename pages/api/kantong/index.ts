@@ -44,7 +44,6 @@ export default async function handler(
 
   if (method === 'POST') {
     try {
-      console.log('test api kantong')
       const data = await formData(req)
       const { fields } = data
       const payload = {

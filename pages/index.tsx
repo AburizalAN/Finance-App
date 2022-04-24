@@ -13,7 +13,6 @@ const Home: NextPage = () => {
   const dispatch = useDispatch()
   const { summaryIncomes } = useSelector((state: any) => state.incomes)
 
-
   useEffect(() => {
     dispatch(ACTIONS.incomes.getSummaryIncomes())
   }, [])

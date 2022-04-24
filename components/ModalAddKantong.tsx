@@ -59,7 +59,9 @@ const ModalAddKantong = ({ open, handleClose }: PropTypes) => {
   }
 
   const handleSubmit = () => {
-    dispatch(ACTIONS.incomes.addKantong(payload))
+    dispatch(ACTIONS.incomes.addKantong(payload, () => {
+      handleClose()
+    }))
   }
   
   return (

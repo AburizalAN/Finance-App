@@ -45,6 +45,14 @@ const ModalBottomWrapper = ({ children, open, handleClose }: PropTypes) => {
   useEffect(() => {
     if (window) setBodyWidth(document.body.clientWidth)
   }, [])
+
+  useEffect(() => {
+    if (window) {
+      window.addEventListener('resize', () => {
+        setBodyWidth(document.body.clientWidth)
+      })
+    }
+  })
   
   return (
     <Modal open={open} onClose={handleClose}>

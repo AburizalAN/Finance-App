@@ -10,6 +10,9 @@ import { parseCurrency } from 'services/helper-client'
 import ModalBottomWrapper from './ModalBottomWrapper'
 import { InputWrapper, Input, IconWrapper, Button } from 'components/screens/global.style'
 import { useRouter} from 'next/router'
+import DatePickerComponent from 'components/DatePickerComponent'
+import { useDispatch, useSelector } from 'react-redux'
+import ACTIONS from 'store/registerActions'
 
 interface PropTypes {
   open: boolean
@@ -44,6 +47,7 @@ const ModalAddIncomes = ({
   open,
   handleClose,
 }: PropTypes) => {
+  const dispatch = useDispatch()
   const router = useRouter()
   const { id = null } = router.query
   const [payload, setPayload] = useState({
@@ -58,6 +62,12 @@ const ModalAddIncomes = ({
       ...payload,
       [key]: value,
     })
+  }
+
+  const handleSubmitIncomes = () => {
+    dispatch(ACTIONS.incomes.addIncomes(payload, () => {
+      handleClose()
+    }))
   }
 
   useEffect(() => {
@@ -106,18 +116,14 @@ const ModalAddIncomes = ({
           placeholder='From'
           style={{ flex: 1 }}
         />
-        <ThisInput
-          value={payload.date}
-          onChange={(e: any) => mutatePayload('date', e.target.value)}
-          placeholder='Tanggal'
-          type="date"
-          width="196px"
-          style={{ marginLeft: 'auto' }}
+        <DatePickerComponent
+          value={payload.date} 
+          setValue={(value: any) => mutatePayload('date', value)}
         />
       </Grid>
       <Box mt="28px">
         <ThisButton
-          onClick={() => {}}
+          onClick={handleSubmitIncomes}
           disableElevation
           fullWidth
           variant="contained"

@@ -28,8 +28,14 @@ const incomes = (state = initialState, action: any) => {
     case redux.POST_ADD_KANTONG_SUCCESS:
       return {
         ...state,
-        loading: false,
         loadingAddKantong: false,
+        error: null,
+      }
+
+    case redux.POST_ADD_INCOMES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
         error: null,
       }
 
@@ -41,8 +47,9 @@ const incomes = (state = initialState, action: any) => {
         summaryIncomes: action.payload,
       }
 
-    case redux.GET_SUMMARY_INCOMES_FAILURE:
+    case redux.POST_ADD_INCOMES_FAILURE:
     case redux.POST_ADD_KANTONG_FAILURE:
+    case redux.GET_SUMMARY_INCOMES_FAILURE:
     case redux.GET_INCOMES_FAILURE:
       return {
         ...state,
@@ -56,6 +63,7 @@ const incomes = (state = initialState, action: any) => {
         loadingAddKantong: true,
       }
 
+    case redux.POST_ADD_INCOMES_LOADING:
     case redux.GET_SUMMARY_INCOMES_LOADING:
     case redux.GET_INCOMES_LOADING:
       return {
