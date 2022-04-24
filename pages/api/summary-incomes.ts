@@ -1,21 +1,22 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { db } from 'services/firebase-admin'
+import { db, incomesRef } from 'services/firebase-admin'
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   const { method } = req
+  const kantongRef = db.collection('kantong')
 
   if (method === 'GET') {
     try {
       const summaryRef = await db.collection('summary_incomes').get()
-      const kantongRef = await db.collection('kantong').get()
+      const kantong = await kantongRef.get()
       let data: Array<Object> = []
       let total: number = 0
 
       // sum total
-      const snapshotTotal = await db.collection('incomes').get()
+      const snapshotTotal = await incomesRef.get()
       snapshotTotal.forEach((doc: any) => {
         total += doc.data().value
       })
@@ -35,11 +36,11 @@ export default async function handler(
       })
 
       // sum total incomes by kantong
-      kantongRef.forEach(async (doc) => {
+      kantong.forEach(async (doc) => {
         const kantongData = doc.data()
         let amount: number = 0
 
-        const snapshotByKantong = await db.collection('incomes').where('kantong.id', '==', doc.id).get()
+        const snapshotByKantong = await incomesRef.where('kantong.id', '==', doc.id).get()
         snapshotByKantong.forEach((doc: any) => {
           amount += doc.data().value
         })

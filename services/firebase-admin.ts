@@ -12,3 +12,5 @@ if (!getApps().length) {
 }
 
 export const db = getFirestore();
+
+export const incomesRef = db.collection('incomes')

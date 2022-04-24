@@ -67,6 +67,7 @@ const ModalAddIncomes = ({
   const handleSubmitIncomes = () => {
     dispatch(ACTIONS.incomes.addIncomes(payload, () => {
       handleClose()
+      dispatch(ACTIONS.incomes.getIncomes(id !== 'all' ? id : null))
     }))
   }
 

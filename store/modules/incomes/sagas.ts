@@ -25,7 +25,11 @@ export function* addKantong({
 
     console.log('success add kantong', payload)
     yield put({ type: redux.POST_ADD_KANTONG_SUCCESS })
-    callback()
+    if (res) {
+      setTimeout(() => {
+        callback()
+      }, 300)
+    }
   } catch (err) {
     yield put({ type: redux.POST_ADD_KANTONG_FAILURE, payload: err })
   }
@@ -46,7 +50,7 @@ export function* addIncomes({
 
     console.log('success add incomes', payload)
     yield put({ type: redux.POST_ADD_INCOMES_SUCCESS })
-    callback()
+    if (res) callback()
   } catch (err) {
     yield put({ type: redux.POST_ADD_INCOMES_FAILURE, payload: err })
   }

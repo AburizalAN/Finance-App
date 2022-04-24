@@ -69,9 +69,8 @@ const Pengeluaran: NextPage = () => {
 
   const submitExpense = () => {
     dispatch(ACTIONS.expenses.postExpenseData(payload, async () => {
-      setTimeout(() => {
-        dispatch(ACTIONS.expenses.getSummaryExpenses())
-      }, 5000)
+      dispatch(ACTIONS.expenses.getSummaryExpenses())
+      router.reload()
       handleCloseAddExpend()
     }))
   }

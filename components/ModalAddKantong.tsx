@@ -11,6 +11,7 @@ import CustomDropdown from "components/CustomDropdown"
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ACTIONS from 'store/registerActions'
+import servicesIncomes from 'store/modules/incomes/services'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { css } from "@emotion/react";
 
@@ -61,6 +62,7 @@ const ModalAddKantong = ({ open, handleClose }: PropTypes) => {
   const handleSubmit = () => {
     dispatch(ACTIONS.incomes.addKantong(payload, () => {
       handleClose()
+      dispatch(ACTIONS.incomes.getSummaryIncomes())
     }))
   }
   
