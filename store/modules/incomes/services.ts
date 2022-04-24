@@ -20,11 +20,17 @@ async function addKantong(payload: any) {
   return res
 }
 
+async function getKantong() {
+  const res = await get('/api/kantong')
+  return res
+}
+
 const services = {
   getIncomes,
   getSummaryIncomes,
   addKantong,
   addIncomes,
+  getKantong,
 }
 
 export default services

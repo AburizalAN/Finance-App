@@ -18,16 +18,20 @@ import { useRouter } from 'next/router'
 
 import { useSelector, useDispatch } from 'react-redux'
 import ACTIONS from 'store/registerActions'
+import { db } from 'services/firebase-client'
+import { collection, onSnapshot } from 'firebase/firestore'
 
 const Pengeluaran: NextPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { summary } = useSelector((state: any) => state.expenses)
+  const { summary, expenses, tags } = useSelector((state: any) => state.expenses)
   const { tags: listTags } = useSelector((state: any) => state.expenses)
 
+  const [totalExpenses, setTotalExpenses] = useState(0)
   const [showAddExpend, setShowAddExpend] = useState(false)
   const [showSelectTag, setShowSelectTag] = useState(false)
-  const [tags, setTags] = useState([])
+  // const [tags, setTags] = useState([])
+  const [filteredTag, setFilteredTag] = useState<Array<any>>([])
   const [selectedTag, setSelectedTag] = useState<any>(null)
   const [chartData, setChartData] = useState({
     labels: [],
@@ -69,30 +73,61 @@ const Pengeluaran: NextPage = () => {
 
   const submitExpense = () => {
     dispatch(ACTIONS.expenses.postExpenseData(payload, async () => {
-      dispatch(ACTIONS.expenses.getSummaryExpenses())
-      router.reload()
       handleCloseAddExpend()
+      dispatch(ACTIONS.expenses.getExpenses())
     }))
   }
 
+  const expensesRef = collection(db, 'pengeluaran')
+
   useEffect(() => {
-    dispatch(ACTIONS.expenses.getSummaryExpenses())
+    // const unsubscribe = onSnapshot(expensesRef, (querySnapshot) => {
+    //   dispatch(ACTIONS.expenses.getSummaryExpenses())
+    //   console.log('listen')
+    // });
     dispatch(ACTIONS.expenses.getTags())
+    dispatch(ACTIONS.expenses.getExpenses())
   }, [])
 
-  const total = summary.find((item: any) => item.id === 'total')
+  useEffect(() => {
+    let total: number = 0;
+    expenses.forEach((expense: any) => {
+      total += expense.value
+    })
+    setTotalExpenses(total)
+  }, [expenses])
+
+  useEffect(() => {
+    const _filteredTag: Array<any> = []
+
+    tags.forEach((tag: any) => {
+      let totalByTag: number = 0
+      expenses.forEach((expense: any) => {
+        if (expense.tag.id === parseInt(tag.id)) {
+          totalByTag += expense.value
+        }
+      })
+      if (totalByTag > 0) {
+        _filteredTag.push({
+          ...tag,
+          amount: totalByTag,
+        })
+      }
+    })
+
+    setFilteredTag(_filteredTag)
+  }, [tags, expenses])
+
+  // const total = summary.find((item: any) => item.id === 'total')
 
   useEffect(() => {
     let labels: Array<string> = []
     let data: Array<any> = []
     let backgroundColor: Array<string> = []
-    const _tags = summary.filter((item: any) => {
-      if (item.id !== 'total' && item.count > 0) {
-        labels = [...labels, item.name]
-        data = [ ...data, item.count ]
-        backgroundColor = [ ...backgroundColor, item.color ]
-        return item
-      }
+    filteredTag.forEach((item: any) => {
+      labels = [...labels, item.name]
+      data = [ ...data, item.amount ]
+      backgroundColor = [ ...backgroundColor, item.color ]
     })
     setChartData((prev: any) => ({
       ...prev,
@@ -103,8 +138,7 @@ const Pengeluaran: NextPage = () => {
         backgroundColor,
       }]
     }))
-    setTags(_tags)
-  }, [summary])
+  }, [filteredTag])
 
   useEffect(() => {
     if (selectedTag) {
@@ -130,7 +164,7 @@ const Pengeluaran: NextPage = () => {
             <Filter sx={{ fontSize: '24px' }}/>
           </IconButton>
         </Box>
-        <PieChart value={total && total.count} data={chartData} />
+        <PieChart value={totalExpenses} data={chartData} />
       </Box>
       <Grid 
         mt="30px"
@@ -144,14 +178,14 @@ const Pengeluaran: NextPage = () => {
         </IconButton>
       </Grid>
       <Grid container direction="column" sx={{ rowGap: '12px' }}>
-        <Link href={`/pengeluaran/${total && total.id}`} passHref>
+        <Link href={`/pengeluaran/total`} passHref>
           <Grid item xs="auto">
             <ThisCard>
               <div className="icon">
                 <Bill fontSize="16px"/>
               </div>
               <Box sx={{ flex: 1 }}>
-                <h5>{total && total.name}</h5>
+                <h5>Total</h5>
                 <Box mt="8px">
                   <ThisLinearProgress variant="determinate" value={100} />
                 </Box>
@@ -162,7 +196,7 @@ const Pengeluaran: NextPage = () => {
             </ThisCard>
           </Grid>
         </Link>
-        {tags.map((tag: any, i: number) => (
+        {filteredTag.map((tag: any, i: number) => (
           <Link key={i} href={`/pengeluaran/${tag.id}`} passHref>
             <Grid item xs="auto">
               <ThisCard>
@@ -178,7 +212,7 @@ const Pengeluaran: NextPage = () => {
                   <Box mt="8px">
                     <ThisLinearProgress
                       variant="determinate"
-                      value={tag.count / total.count * 100}
+                      value={tag.amount / totalExpenses * 100}
                     />
                   </Box>
                 </Box>

@@ -3,13 +3,13 @@ import IconIn from 'components/icons/IconIn'
 import { GreenBackground, WhiteBackground } from 'components/style'
 import { parseCurrency } from 'services/helper-client'
 
-const TotalSaldoComponent = ({ data }: { data: any }) => {
+const TotalSaldoComponent = ({ amount }: { amount?: number }) => {
   return (
     <div>
       <GreenBackground>
         <div className="left">
           <h5>Saldo Saya</h5>
-          <h4>Rp{parseCurrency(data?.amount ?? 0)}</h4>
+          <h4>Rp{parseCurrency(amount ?? 0)}</h4>
         </div>
         <div className="right">
           <IconIn />

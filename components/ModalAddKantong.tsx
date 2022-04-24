@@ -14,6 +14,7 @@ import ACTIONS from 'store/registerActions'
 import servicesIncomes from 'store/modules/incomes/services'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { css } from "@emotion/react";
+import { useRouter } from 'next/router'
 
 interface PropTypes {
   open: boolean
@@ -45,6 +46,7 @@ const loader = css`
 
 const ModalAddKantong = ({ open, handleClose }: PropTypes) => {
   const dispatch = useDispatch()
+  const router = useRouter()
   const { loadingAddKantong } = useSelector((state: any) => state.incomes)
 
   const [payload, setPayload] = useState({
@@ -62,7 +64,10 @@ const ModalAddKantong = ({ open, handleClose }: PropTypes) => {
   const handleSubmit = () => {
     dispatch(ACTIONS.incomes.addKantong(payload, () => {
       handleClose()
-      dispatch(ACTIONS.incomes.getSummaryIncomes())
+      // router.reload()
+      // dispatch(ACTIONS.incomes.getSummaryIncomes())
+      dispatch(ACTIONS.incomes.getIncomes())
+      dispatch(ACTIONS.incomes.getKantong())
     }))
   }
   

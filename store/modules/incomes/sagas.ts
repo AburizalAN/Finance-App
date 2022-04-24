@@ -88,6 +88,22 @@ export function* getSummaryIncomes() {
   }
 }
 
+export function* getKantong() {
+  try {
+    yield put({ type: redux.GET_KANTONG_LOADING })
+    let res: ResponseGenerator = yield call(SERVICES.getKantong)
+
+    if (res.status !== 200) throw res.data.error
+
+    const { data } = res
+    const payload = data
+
+    yield put({ type: redux.GET_KANTONG_SUCCESS, payload })
+  } catch (err) {
+    yield put({ type: redux.GET_KANTONG_FAILURE, payload: err })
+  }
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function* () {
   yield all([
@@ -95,5 +111,6 @@ export default function* () {
     takeEvery(saga.GET_SUMMARY_INCOMES, () => getSummaryIncomes()),
     takeEvery(saga.GET_INCOMES, (props: any) => getIncomes(props)),
     takeEvery(saga.ADD_INCOMES, (props: any) => addIncomes(props)),
+    takeEvery(saga.GET_KANTONG, () => getKantong()),
   ])
 }

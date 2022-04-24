@@ -1,6 +1,6 @@
 import { get, post } from 'services/fetch'
 
-async function getExpenses(id: any) {
+async function getExpenses(id?: any) {
   const res = await get(`/api/expenses${id !== null && id !== 'total' ? `?tag=${id}` : ''}`)
   return res
 }

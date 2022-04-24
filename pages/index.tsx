@@ -5,28 +5,55 @@ import TotalSaldoComponent from 'components/TotalSaldoComponent'
 import Box from '@mui/material/Box'
 import TabKantong from 'components/TabKantong'
 import BannerPengeluaran from 'components/BannerPengeluaran'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ACTIONS from 'store/registerActions'
 import { useDispatch, useSelector } from 'react-redux'
-import { db } from 'services/firebase-client'
-import { collection, onSnapshot } from 'firebase/firestore'
+// import { db } from 'services/firebase-client'
+// import { collection, onSnapshot } from 'firebase/firestore'
 
 const Home: NextPage = () => {
   const dispatch = useDispatch()
-  const { summaryIncomes } = useSelector((state: any) => state.incomes)
+  const { incomes, kantong } = useSelector((state: any) => state.incomes)
 
-  const kantongRef = collection(db, 'kantong')
+  const [listKantong, setListKantong] = useState<Array<any>>([])
+  const [totalSaldo, setTotalSaldo] = useState(0)
+
+  // const kantongRef = collection(db, 'kantong')
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(kantongRef, (querySnapshot) => {
-      dispatch(ACTIONS.incomes.getSummaryIncomes())
-      console.log('listen')
-    });
+    // const unsubscribe = onSnapshot(kantongRef, (querySnapshot) => {
+    //   dispatch(ACTIONS.incomes.getSummaryIncomes())
+    //   console.log('listen')
+    // });
     // dispatch(ACTIONS.incomes.getSummaryIncomes())
+    dispatch(ACTIONS.incomes.getIncomes())
+    dispatch(ACTIONS.incomes.getKantong())
   }, [])
 
-  const listKantong = summaryIncomes.filter((item: any) => item.id !== 'total')
-  const totalSaldo = summaryIncomes.find((item: any) => item.id === 'total')
+  useEffect(() => {
+    let _listKantong: Array<any> = []
+    kantong.forEach((item: any) => {
+      let total: number = 0
+      incomes.forEach((income: any) => {
+        if (income.kantong.id === item.id) {
+          total += income.value
+        }
+      })
+      _listKantong.push({
+        ...item,
+        amount: total,
+      })
+    })
+    setListKantong(_listKantong)
+  }, [kantong, incomes])
+
+  useEffect(() => {
+    let totalSaldo: number = 0
+    incomes.forEach((income: any) => {
+      totalSaldo += income.value
+    })
+    setTotalSaldo(totalSaldo)
+  }, [incomes])
 
   return (
     <Box pt="24px" pb="72px" px="12px" sx={{ minHeight: "100vh", position: 'relative' }}>
@@ -41,7 +68,7 @@ const Home: NextPage = () => {
         <h3>My Finance Application</h3>
       </AppTitle>
 
-      <TotalSaldoComponent data={totalSaldo} />
+      <TotalSaldoComponent amount={totalSaldo} />
       <TabKantong list={listKantong} />
       <BannerPengeluaran />
     </Box>

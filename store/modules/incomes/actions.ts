@@ -31,12 +31,19 @@ function getSummaryIncomes() {
   }
 }
 
+function getKantong() {
+  return {
+    type: saga.GET_KANTONG,
+  }
+}
+
 const actions = {
   incomes: {
     addKantong,
     getSummaryIncomes,
     getIncomes,
     addIncomes,
+    getKantong,
   }
 }
 
