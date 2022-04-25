@@ -52,6 +52,11 @@ export const theme = createTheme({
   }
 })
 
+export const BodyWrapper = styled(Box)`
+  min-height: 100vh;
+  position: relative;
+`
+
 export const AppTitle = styled(Box)`
   h3 {
     font-weight: 700;
