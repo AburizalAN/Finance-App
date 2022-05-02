@@ -4,6 +4,9 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import GoogleLogin from 'react-google-login'
+import Cookie from 'js-cookie'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const bodyStyle = {
   display: 'flex',
@@ -35,11 +38,28 @@ const MyGoogleButton = (props: any) => {
 }
 
 const Login: NextPage = () => {
+  const router = useRouter()
+  const { redirect = null } = router.query
+
   const responseGoogle = (response: any) => {
     console.log(response);
+    if (Object.keys(response).length > 0) {
+      Cookie.set('AuthToken', response.tokenId)
+      if (redirect) {
+        router.push(`${redirect}`)
+      } else {
+        router.push('/')
+      }
+    }
   }
 
   const clientId: string = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID ?? ''
+
+  useEffect(() => {
+    if (Cookie.get('AuthToken')) {
+      router.push('/')
+    }
+  }, [])
   
   return (
     <BodyWrapper sx={bodyStyle}  pt="24px" pb="72px" px="12px">

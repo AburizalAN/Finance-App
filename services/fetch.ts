@@ -1,6 +1,12 @@
+import Cookie from 'js-cookie'
+
 export async function get(uri: string) {
   try {
-    const res = await fetch(uri)
+    const res = await fetch(uri, {
+      headers: {
+        Authorization: 'Bearer ' + Cookie.get('AuthToken'),
+      }
+    })
     const resJSON = await res.json()
   
     if (res.status !== 200) throw resJSON
@@ -22,6 +28,7 @@ export async function post(uri: string, payload: any) {
       method: 'POST',
       body: formData,
       headers: {
+        Authorization: 'Bearer ' + Cookie.get('AuthToken'),
         accept: 'application/json',
       }
     })

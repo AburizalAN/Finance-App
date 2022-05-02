@@ -33,11 +33,24 @@ const Home: NextPage = () => {
   // }, [])
 
   useEffect(() => {
+    const fetchTest = async () => {
+      const res = await fetch('/api/user-profile', {
+        headers: {
+          Authorization: 'Bearer ' + Cookie.get('AuthToken'),
+        }
+      })
+      const data = await res.json()
+      console.log('fetch test', data)
+    }
+    fetchTest()
+  }, [])
+
+  useEffect(() => {
     if (Cookie.get('AuthToken')) {
       dispatch(ACTIONS.incomes.getIncomes())
       dispatch(ACTIONS.incomes.getKantong())
     } else {
-      router.push(`/login?redirect=${router.asPath}`);
+      router.push(`/login?redirect=${router.asPath}`)
     }
   }, []);
 
