@@ -2809,6 +2809,11 @@ date-and-time@^2.0.0:
   resolved "https://registry.yarnpkg.com/date-and-time/-/date-and-time-2.3.0.tgz#1b509be4c938dbbf5fc9c14d66e1daf9fe3cef13"
   integrity sha512-DY53oj742mykXjZzDxT7NxH5cxwBRb7FsVG5+8pcV96qU9JQd0UhA21pQB18fwwsXOXeSM0RJV4OzgVxu8eatg==
 
+dates-generator@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/dates-generator/-/dates-generator-1.0.4.tgz#b0af22d7c90db2376956d117a34b42045ec71568"
+  integrity sha512-ELngMfQ0HbTRnRDeE1Qw9nhimsoay+21SdC7qP/Au1HSNJPTv3xJ4eqhHka6IYSQlAG9qDkYg0n2Auxdd+mNBQ==
+
 debug@4:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"

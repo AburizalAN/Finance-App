@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import ACTIONS from 'store/registerActions'
 import { db } from 'services/firebase-client'
 import { collection, onSnapshot } from 'firebase/firestore'
+import ModalDateRange from 'components/ModalDateRange'
 
 const Pengeluaran: NextPage = () => {
   const dispatch = useDispatch()
@@ -30,6 +31,7 @@ const Pengeluaran: NextPage = () => {
   const [totalExpenses, setTotalExpenses] = useState(0)
   const [showAddExpend, setShowAddExpend] = useState(false)
   const [showSelectTag, setShowSelectTag] = useState(false)
+  const [showDateRange, setShowDateRange] = useState(false)
   // const [tags, setTags] = useState([])
   const [filteredTag, setFilteredTag] = useState<Array<any>>([])
   const [selectedTag, setSelectedTag] = useState<any>(null)
@@ -63,7 +65,7 @@ const Pengeluaran: NextPage = () => {
       date: null,
       value: 0,
     })
-    setSelectedTag(null)
+    setSelectedTag(tags[0])
   }
 
   const handleCloseAddExpend = () => {
@@ -77,8 +79,6 @@ const Pengeluaran: NextPage = () => {
       dispatch(ACTIONS.expenses.getExpenses())
     }))
   }
-
-  const expensesRef = collection(db, 'pengeluaran')
 
   useEffect(() => {
     // const unsubscribe = onSnapshot(expensesRef, (querySnapshot) => {
@@ -118,7 +118,11 @@ const Pengeluaran: NextPage = () => {
     setFilteredTag(_filteredTag)
   }, [tags, expenses])
 
-  // const total = summary.find((item: any) => item.id === 'total')
+  useEffect(() => {
+    if (tags.length > 0) {
+      setSelectedTag(tags[0])
+    }
+  }, [tags])
 
   useEffect(() => {
     let labels: Array<string> = []
@@ -150,7 +154,7 @@ const Pengeluaran: NextPage = () => {
     <Box px="12px" pb="24px" sx={{ minHeight: "100vh", position: 'relative' }}>
       <TopBar backAction={() => router.push('/')} title="Pengeluaran" />
       <Box pt="58px" sx={{ display: 'flex', justifyContent: 'center' }}>
-        <FilterDate />
+        <FilterDate onClick={() => setShowDateRange(true)} />
       </Box>
       <Box mt="30px" sx={{ position: 'relative' }}>
         <Box 
@@ -241,6 +245,10 @@ const Pengeluaran: NextPage = () => {
         open={showSelectTag}
         onSelect={(value: any) => setSelectedTag(value)}
         handleClose={() => setShowSelectTag(false)}
+      />
+      <ModalDateRange
+        open={showDateRange}
+        handleClose={() => setShowDateRange(false)}
       />
     </Box>
   )

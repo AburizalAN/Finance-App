@@ -16,9 +16,13 @@ const Container = styled(Box)`
   }
 `
 
-const FilterDate = () => {
+interface PropTypes {
+  onClick: () => void
+}
+
+const FilterDate = ({ onClick }: PropTypes) => {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <div>15 Feb 22</div>
       <div>--</div>
       <div>01 Mar 22</div>

@@ -148,3 +148,16 @@ export const AddButton = styled(IconButton)`
   right: 0;
   transform: translateY(50%);
 `
+
+export const ModalContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  padding: 12px;
+  outline: none;
+  & > * {
+    margin: auto;
+  }
+`

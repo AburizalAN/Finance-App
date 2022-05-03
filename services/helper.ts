@@ -18,7 +18,6 @@ export const decodeIDToken = async (req: NextApiRequest, res: NextApiResponse) =
   
   try {
     const { authorization }: any = req.headers
-    console.log('authorization', authorization)
     const token = authorization.split(' ')[1]
     const ticket = await client.verifyIdToken({
       idToken: token,
@@ -27,6 +26,7 @@ export const decodeIDToken = async (req: NextApiRequest, res: NextApiResponse) =
     const decodeToken = ticket.getPayload()
     return { success: true, data: decodeToken }
   } catch (err: any) {
+    res.setHeader('Set-Cookie', 'AuthToken=deleted; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT');
     return { success: false, data: err }
   }
 }
