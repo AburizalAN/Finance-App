@@ -11,6 +11,10 @@ const initialState = {
   tag: {},
   successSubmit: false,
   error: null,
+  date: {
+    start: null,
+    end: null,
+  }
 }
 
 const expenses = (state = initialState, action: any) => {
@@ -56,6 +60,24 @@ const expenses = (state = initialState, action: any) => {
         loading: false,
         error: null,
         successSubmit: true,
+      }
+
+    case redux.SET_START_DATE:
+      return {
+        ...state,
+        date: {
+          ...state.date,
+          start: action.value,
+        }
+      }
+
+    case redux.SET_END_DATE:
+      return {
+        ...state,
+        date: {
+          ...state.date,
+          end: action.value,
+        }
       }
 
     case redux.POST_EXPENSE_FAILURE:

@@ -36,6 +36,20 @@ function postExpenseData(value: any, callback?: () => void) {
   }
 }
 
+function setStartDate(date: any) {
+  return {
+    type: redux.SET_START_DATE,
+    value: date,
+  }
+}
+
+function setEndDate(date: any) {
+  return {
+    type: redux.SET_END_DATE,
+    value: date,
+  }
+}
+
 const actions: Object = {
   expenses: {
     getExpenses,
@@ -43,6 +57,8 @@ const actions: Object = {
     getSummaryExpenses,
     getDetailTag,
     postExpenseData,
+    setStartDate,
+    setEndDate,
   }
 }
 

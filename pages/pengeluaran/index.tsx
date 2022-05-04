@@ -25,7 +25,7 @@ import ModalDateRange from 'components/ModalDateRange'
 const Pengeluaran: NextPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { summary, expenses, tags } = useSelector((state: any) => state.expenses)
+  const { summary, expenses, tags, date } = useSelector((state: any) => state.expenses)
   const { tags: listTags } = useSelector((state: any) => state.expenses)
 
   const [totalExpenses, setTotalExpenses] = useState(0)
@@ -150,6 +150,8 @@ const Pengeluaran: NextPage = () => {
     }
   }, [selectedTag])
 
+  console.log('date', date)
+
   return (
     <Box px="12px" pb="24px" sx={{ minHeight: "100vh", position: 'relative' }}>
       <TopBar backAction={() => router.push('/')} title="Pengeluaran" />
@@ -249,9 +251,9 @@ const Pengeluaran: NextPage = () => {
       <ModalDateRange
         open={showDateRange}
         handleClose={() => setShowDateRange(false)}
-        setStartDate={() => {}}
-        setEndDate={() => {}}
-        handleSubmit={() => {}}
+        setStartDate={(date: any) => dispatch(ACTIONS.expenses.setStartDate(date))}
+        setEndDate={(date: any) => dispatch(ACTIONS.expenses.setEndDate(date))}
+        handleSubmit={() => dispatch(ACTIONS.expenses.getExpenses())}
       />
     </Box>
   )

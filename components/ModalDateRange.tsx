@@ -257,19 +257,18 @@ const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTy
     }
   }
 
-  console.log('dates', dates)
-
   useEffect(() => {
     const { point1, point2 } = selectedDate
+    console.log('selectedDate', selectedDate)
     if (point1.isBefore(point2)) {
-      setStartDate(point1)
-      setEndDate(point2)
+      setStartDate(point1.format('YYYY-MM-DD'))
+      setEndDate(point2.format('YYYY-MM-DD'))
     } else if (point1.isAfter(point2)) {
-      setStartDate(point2)
-      setEndDate(point1)
+      setStartDate(point2.format('YYYY-MM-DD'))
+      setEndDate(point1.format('YYYY-MM-DD'))
     } else {
-      setStartDate(point1)
-      setEndDate(point1)
+      setStartDate(point1.format('YYYY-MM-DD'))
+      setEndDate(point1.format('YYYY-MM-DD'))
     }
   }, [selectedDate])
 
