@@ -18,12 +18,15 @@ const WhiteBox = styled.div`
   background-color: #FFFFFF;
   border-radius: 12px;
   padding: 16px;
-  max-width: 420px;
+  max-width: 390px;
+  min-width: min-content;
 `
 const DatesBox = styled.div`
+  justify-content: center;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-columns: repeat(7, 40px);
+  grid-template-rows: repeat(5, 40px);
+  row-gap: 2px;
   .header {
     display: flex;
     align-items: center;
@@ -44,30 +47,62 @@ const DateItem = styled.div(({ isMarked }: any) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: '46px',
-      height: '46px',
+      width: '40px',
+      height: '40px',
       fontSize: '12px',
       borderRadius: '36px',
       border: 'none',
       outline: 'none',
       background: 'none',
-      '&:hover': {
-        backgroundColor: '#F5F5F5',
-      }
+      transition: 'all 0.2s ease',
     },
   }
 
   switch (isMarked) {
-    case true:
+    case 'active':
       return {
         ...styles,
-        backgroundColor: '#4000d4',
+        backgroundColor: '#5331b1',
         button: {
           ...styles.button,
           color: 'white',
         }
       }
-    case false:
+    case 'start':
+      return {
+        ...styles,
+        backgroundColor: '#5331b1',
+        borderRadius: '50% 0 0 50%',
+        button: {
+          ...styles.button,
+          backgroundColor: '#4000d4',
+          color: 'white',
+        }
+      }
+    case 'end':
+      return {
+        ...styles,
+        backgroundColor: '#5331b1',
+        borderRadius: '0 50% 50% 0',
+        button: {
+          ...styles.button,
+          backgroundColor: '#4000d4',
+          color: 'white',
+        }
+      }
+    case 'single': {
+      return {
+        ...styles,
+        backgroundColor: '#5331b1',
+        borderRadius: '50%',
+        button: {
+          ...styles.button,
+          backgroundColor: '#4000d4',
+          color: 'white',
+        }
+      }
+    }
+    default:
       return {
         ...styles,
       }
@@ -77,6 +112,7 @@ const DateItem = styled.div(({ isMarked }: any) => {
 const HeaderCalendar = styled.div`
   display: flex;
   align-items: center;
+  padding: 8px 0;
   .center {
     margin: auto;
   }
@@ -89,13 +125,13 @@ interface PropTypes {
 
 const ModalDateRange = ({ open, handleClose }: PropTypes) => {
   const [selectedDate, setSelectedDate] = useState<any>({
-    start: moment(),
-    end: moment(),
+    point1: moment(),
+    point2: moment(),
   })
   const [dates, setDates] = useState<any>([])
   const [calendar, setCalendar] = useState<any>({
-    month: selectedDate.start.format('M'),
-    year: selectedDate.start.format('YYYY'),
+    month: selectedDate.point1.format('M'),
+    year: selectedDate.point1.format('YYYY'),
   })
 
   useEffect(() => {
@@ -160,17 +196,16 @@ const ModalDateRange = ({ open, handleClose }: PropTypes) => {
 
   const selectDate = (datetime: any) => {
     const date: any = datetime.split(', ')[0]
-    console.log('select', moment(date).format('YYYY-MM-DD'))
-    if (selectedDate.start && selectedDate.end) {
+    if (selectedDate.point1 && selectedDate.point2) {
       setSelectedDate((prev: any) => ({
         ...prev,
-        start: moment(date),
-        end: null,
+        point1: moment(date),
+        point2: null,
       }))
     } else {
       setSelectedDate((prev: any) => ({
         ...prev,
-        end: moment(date),
+        point2: moment(date),
       }))
     }
   }
@@ -178,10 +213,29 @@ const ModalDateRange = ({ open, handleClose }: PropTypes) => {
   const checkMarked = (datetime: any) => {
     const date: any = datetime.split(', ')[0]
     const now = moment(date)
-    if (now.isBefore(selectedDate.end) && now.isAfter(selectedDate.start)) {
-      return true
+    let start, end
+    
+    if (selectedDate.point1.isBefore(selectedDate.point2)) {
+      start = selectedDate.point1
+      end = selectedDate.point2
+    } else if (selectedDate.point1.isAfter(selectedDate.point2)) {
+      start = selectedDate.point2
+      end = selectedDate.point1
+    } else if (now.isSame(selectedDate.point1)) {
+      return 'single'
     } else {
-      return false
+      start = null
+      end = null
+    }
+
+    if (now.isBefore(end) && now.isAfter(start)) {
+      return 'active'
+    } else if (now.isSame(start)) {
+      return 'start'
+    } else if (now.isSame(end)) {
+      return 'end'
+    } else {
+      return null
     }
   }
 
