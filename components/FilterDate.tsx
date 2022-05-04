@@ -17,7 +17,7 @@ const Container = styled(Box)`
 `
 
 interface PropTypes {
-  onClick: () => void
+  onClick?: () => void
 }
 
 const FilterDate = ({ onClick }: PropTypes) => {
