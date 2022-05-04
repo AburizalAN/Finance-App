@@ -13,7 +13,9 @@ interface ResponseGenerator {
 export function* getExpenses({ id = null }: { id?: any }) {
   try {
     yield put({ type: redux.GET_EXPENSES_LOADING })
-    let res: ResponseGenerator = yield call(SERVICES.getExpenses, id)
+    const { date } = yield select((state: any) => state.expenses)
+    const { start, end } = date
+    let res: ResponseGenerator = yield call(SERVICES.getExpenses, { id, start, end })
 
     if (res.status !== 200) throw res.data.error
 

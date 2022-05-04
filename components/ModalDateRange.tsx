@@ -305,7 +305,16 @@ const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTy
         )) : null}
       </DatesBox>
       <Box mt="16px">
-        <Button onClick={handleSubmit} sx={{ p: '14px', borderRadius: '12px' }} variant="contained" fullWidth disableElevation>
+        <Button
+          onClick={() => {
+            handleSubmit()
+            handleClose()
+          }}
+          sx={{ p: '14px', borderRadius: '12px' }}
+          variant="contained"
+          fullWidth
+          disableElevation
+        >
           Save
         </Button>
       </Box>

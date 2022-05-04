@@ -1,7 +1,15 @@
 import { get, post } from 'services/fetch'
 
-async function getExpenses(id?: any) {
-  const res = await get(`/api/expenses${id !== null && id !== 'total' ? `?tag=${id}` : ''}`)
+async function getExpenses(query: any) {
+  const tempQuery: any = query
+  Object.entries(tempQuery).forEach(([key, value]: Array<any>) => {
+    if (!value) {
+      delete tempQuery[key]
+    }
+  })
+  const fixQuery = new URLSearchParams(tempQuery).toString()
+  console.log('query', fixQuery)
+  const res = await get(`/api/expenses${fixQuery ? `?${fixQuery}` : ''}`)
   return res
 }
 

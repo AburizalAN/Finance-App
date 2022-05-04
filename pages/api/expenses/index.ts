@@ -18,7 +18,7 @@ export default async function handler(
   const { method, query } = req
   const pengeluaranRef = db.collection('pengeluaran')
   const tagsRef = db.collection('tags')
-  const { tag = null }: { tag?: any } = query
+  const { id = null, start = null, end = null }: any = query
   const decodeToken = await decodeIDToken(req, res)
 
   if (decodeToken.success) {
@@ -64,10 +64,21 @@ export default async function handler(
   
     if (method === 'GET') {
       try {
+        const startDate = Timestamp.fromDate(new Date(start))
+        const endDate = Timestamp.fromDate(new Date(end))
         let collection: any[] = []
-        const snapshotExpense = tag 
-          ? await pengeluaranRef.where('user.sub', '==', decodeToken.data.sub).where('tag.id', '==', parseInt(tag)).get()
-          : await pengeluaranRef.where('user.sub', '==', decodeToken.data.sub).get()
+        const snapshotExpense = id 
+          ? await pengeluaranRef
+            .where('user.sub', '==', decodeToken.data.sub)
+            .where('date', '>=', startDate)
+            .where('date', '<=', endDate)
+            .where('tag.id', '==', parseInt(id))
+            .get()
+          : await pengeluaranRef
+            .where('user.sub', '==', decodeToken.data.sub)
+            .where('date', '>=', startDate)
+            .where('date', '<=', endDate)
+            .get()
         snapshotExpense.forEach((doc: any) => {
           collection.push({
             id: doc.id,
