@@ -249,6 +249,9 @@ const Pengeluaran: NextPage = () => {
       <ModalDateRange
         open={showDateRange}
         handleClose={() => setShowDateRange(false)}
+        setStartDate={() => {}}
+        setEndDate={() => {}}
+        handleSubmit={() => {}}
       />
     </Box>
   )

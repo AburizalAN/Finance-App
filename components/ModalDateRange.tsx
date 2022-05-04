@@ -7,6 +7,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import IconButton from '@mui/material/IconButton'
 import Grid from '@mui/material/Grid'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import { useState, useEffect, Fragment } from 'react'
 import moment from 'moment'
 const { datesGenerator } = require('dates-generator')
@@ -18,7 +20,7 @@ const WhiteBox = styled.div`
   background-color: #FFFFFF;
   border-radius: 12px;
   padding: 16px;
-  max-width: 390px;
+  max-width: 312px;
   min-width: min-content;
 `
 const DatesBox = styled.div`
@@ -119,11 +121,27 @@ const HeaderCalendar = styled.div`
 `
 
 interface PropTypes {
-  open: boolean
+  open?: boolean
   handleClose: () => void
+  setStartDate: (value: any) => void
+  setEndDate: (value: any) => void
+  handleSubmit: () => void
 }
 
-const ModalDateRange = ({ open, handleClose }: PropTypes) => {
+const ModalDateRange = ({ open = false, handleClose, setStartDate, setEndDate, handleSubmit }: PropTypes) => {
+  return (
+    <Modal open={open}>
+      <Fade in={open}>
+        <ModalContainer>
+          <Content handleClose={handleClose} setStartDate={setStartDate} setEndDate={setEndDate} handleSubmit={handleSubmit} />
+        </ModalContainer>
+      </Fade>
+    </Modal>
+  )
+}
+
+
+const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTypes) => {
   const [selectedDate, setSelectedDate] = useState<any>({
     point1: moment(),
     point2: moment(),
@@ -241,45 +259,58 @@ const ModalDateRange = ({ open, handleClose }: PropTypes) => {
 
   console.log('dates', dates)
 
+  useEffect(() => {
+    const { point1, point2 } = selectedDate
+    if (point1.isBefore(point2)) {
+      setStartDate(point1)
+      setEndDate(point2)
+    } else if (point1.isAfter(point2)) {
+      setStartDate(point2)
+      setEndDate(point1)
+    } else {
+      setStartDate(point1)
+      setEndDate(point1)
+    }
+  }, [selectedDate])
+
   return (
-    <Modal open={open}>
-      <Fade in={open}>
-        <ModalContainer>
-          <WhiteBox>
-            <Grid mb="12px" container justifyContent="flex-end">
-              <IconButton onClick={handleClose}>
-                <CloseIcon />
-              </IconButton>
-            </Grid>
-            <HeaderCalendar>
-              <IconButton onClick={onClickPrev}>
-                <ChevronLeftIcon />
-              </IconButton>
-              <div className="center">{months[calendar.month]} {calendar.year}</div>
-              <IconButton onClick={onClickNext}>
-                <ChevronRightIcon />
-              </IconButton>
-            </HeaderCalendar>
-            <DatesBox>
-              {days.map((day: string, i: number) => (
-                <Fragment key={i}>
-                  <div className="header">{day}</div>
-                </Fragment>
-              ))}
-              {dates.length > 0 ? dates.map((week: any, i: number) => (
-                <Fragment key={i}>
-                  {week.map((day: any, j: number) => (
-                    <DateItem isMarked={checkMarked(day.jsDate)} key={j}>
-                      <button onClick={() => selectDate(day.jsDate)}>{day.date}</button>
-                    </DateItem>
-                  ))}
-                </Fragment>
-              )) : null}
-            </DatesBox>
-          </WhiteBox>
-        </ModalContainer>
-      </Fade>
-    </Modal>
+    <WhiteBox>
+      <Grid mb="12px" container justifyContent="flex-end">
+        <IconButton onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
+      </Grid>
+      <HeaderCalendar>
+        <IconButton onClick={onClickPrev}>
+          <ChevronLeftIcon />
+        </IconButton>
+        <div className="center">{months[calendar.month]} {calendar.year}</div>
+        <IconButton onClick={onClickNext}>
+          <ChevronRightIcon />
+        </IconButton>
+      </HeaderCalendar>
+      <DatesBox>
+        {days.map((day: string, i: number) => (
+          <Fragment key={i}>
+            <div className="header">{day}</div>
+          </Fragment>
+        ))}
+        {dates.length > 0 ? dates.map((week: any, i: number) => (
+          <Fragment key={i}>
+            {week.map((day: any, j: number) => (
+              <DateItem isMarked={checkMarked(day.jsDate)} key={j}>
+                <button onClick={() => selectDate(day.jsDate)}>{day.date}</button>
+              </DateItem>
+            ))}
+          </Fragment>
+        )) : null}
+      </DatesBox>
+      <Box mt="16px">
+        <Button onClick={handleSubmit} sx={{ p: '14px', borderRadius: '12px' }} variant="contained" fullWidth disableElevation>
+          Save
+        </Button>
+      </Box>
+    </WhiteBox>
   )
 }
 
