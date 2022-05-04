@@ -251,8 +251,8 @@ const Pengeluaran: NextPage = () => {
       <ModalDateRange
         open={showDateRange}
         handleClose={() => setShowDateRange(false)}
-        setStartDate={(date: any) => dispatch(ACTIONS.expenses.setStartDate(date))}
-        setEndDate={(date: any) => dispatch(ACTIONS.expenses.setEndDate(date))}
+        setStartDate={(date: any) => dispatch(ACTIONS.expenses.setStartDate(date.format('YYYY-MM-DD')))}
+        setEndDate={(date: any) => dispatch(ACTIONS.expenses.setEndDate(date.format('YYYY-MM-DD')))}
         handleSubmit={() => dispatch(ACTIONS.expenses.getExpenses())}
       />
     </Box>

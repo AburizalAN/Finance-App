@@ -2,6 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { decodeIDToken } from 'services/helper'
 import { db } from 'services/firebase-admin'
+import { Timestamp } from 'firebase-admin/firestore'
 import { formData } from 'services/helper'
 
 export const config = {
@@ -29,7 +30,7 @@ export default async function handler(
         const selectedTag = snapshot.data()
         const payload: any = {
           label: fields.label,
-          date: fields.date,
+          date: Timestamp.fromDate(new Date(fields.date)),
           value: parseInt(fields.value),
           tag: {
             id: parseInt(fields.tag),

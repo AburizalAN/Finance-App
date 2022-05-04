@@ -1,5 +1,7 @@
 import Box from '@mui/material/Box'
 import styled from '@emotion/styled'
+import { useSelector } from 'react-redux'
+import moment from 'moment'
 
 const Container = styled(Box)`
   border: 1px solid #D1D1D1;
@@ -21,11 +23,13 @@ interface PropTypes {
 }
 
 const FilterDate = ({ onClick }: PropTypes) => {
+  const { date } = useSelector((state: any) => state.expenses)
+
   return (
     <Container onClick={onClick}>
-      <div>15 Feb 22</div>
+      <div>{moment(date.start).format('DD MMM YY')}</div>
       <div>--</div>
-      <div>01 Mar 22</div>
+      <div>{moment(date.end).format('DD MMM YY')}</div>
     </Container>
   )
 }

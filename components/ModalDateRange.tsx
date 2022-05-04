@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import { useState, useEffect, Fragment } from 'react'
 import moment from 'moment'
+import { useSelector } from 'react-redux'
 const { datesGenerator } = require('dates-generator')
 
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -142,13 +143,14 @@ const ModalDateRange = ({ open = false, handleClose, setStartDate, setEndDate, h
 
 
 const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTypes) => {
+  const { date } = useSelector((state: any) => state.expenses)
   const [selectedDate, setSelectedDate] = useState<any>({
-    point1: moment(),
-    point2: moment(),
+    point1: moment(date.start),
+    point2: moment(date.end),
   })
   const [dates, setDates] = useState<any>([])
   const [calendar, setCalendar] = useState<any>({
-    month: selectedDate.point1.format('M'),
+    month: selectedDate.point1.month(),
     year: selectedDate.point1.format('YYYY'),
   })
 
@@ -171,7 +173,6 @@ const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTy
   }, [])
 
   const onClickNext = () => {
-    console.log('next')
     const payload = {
       month: calendar.nextMonth,
       year: calendar.nextYear,
@@ -192,7 +193,6 @@ const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTy
   }
 
   const onClickPrev = () => {
-    console.log('prev')
     const payload = {
       month: calendar.previousMonth,
       year: calendar.previousYear,
@@ -261,14 +261,14 @@ const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTy
     const { point1, point2 } = selectedDate
     console.log('selectedDate', selectedDate)
     if (point1.isBefore(point2)) {
-      setStartDate(point1.format('YYYY-MM-DD'))
-      setEndDate(point2.format('YYYY-MM-DD'))
+      setStartDate(point1)
+      setEndDate(point2)
     } else if (point1.isAfter(point2)) {
-      setStartDate(point2.format('YYYY-MM-DD'))
-      setEndDate(point1.format('YYYY-MM-DD'))
+      setStartDate(point2)
+      setEndDate(point1)
     } else {
-      setStartDate(point1.format('YYYY-MM-DD'))
-      setEndDate(point1.format('YYYY-MM-DD'))
+      setStartDate(point1)
+      setEndDate(point1)
     }
   }, [selectedDate])
 

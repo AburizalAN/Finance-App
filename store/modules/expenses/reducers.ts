@@ -1,5 +1,6 @@
 import types from './types'
 import { HYDRATE } from 'next-redux-wrapper'
+import moment from 'moment'
 
 const { redux } = types
 
@@ -12,8 +13,8 @@ const initialState = {
   successSubmit: false,
   error: null,
   date: {
-    start: null,
-    end: null,
+    start: moment().startOf('month').format('YYYY-MM-DD'),
+    end: moment().endOf('month').format('YYYY-MM-DD'),
   }
 }
 
