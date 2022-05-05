@@ -5,13 +5,13 @@ import styled from '@emotion/styled'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import IconButton from '@mui/material/IconButton'
-import Bill from 'components/icons/Bill'
 import { parseCurrency } from 'services/helper-client'
 import ModalBottomWrapper from './ModalBottomWrapper'
-import { InputWrapper, Input, IconWrapper, Button } from 'components/screens/global.style'
+import { InputWrapper, Input, IconWrapper, Button, InputStyle } from 'components/screens/global.style'
 import { useRouter} from 'next/router'
-import DatePickerComponent from 'components/DatePickerComponent'
 import { useDispatch, useSelector } from 'react-redux'
+import ModalDatePicker from 'components/ModalDatePicker'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import ACTIONS from 'store/registerActions'
 
 interface PropTypes {
@@ -56,6 +56,7 @@ const ModalAddIncomes = ({
     kantong: null,
     value: 0,
   })
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
   const mutatePayload = (key: string, value: any) => {
     setPayload({
@@ -117,10 +118,27 @@ const ModalAddIncomes = ({
           placeholder='From'
           style={{ flex: 1 }}
         />
-        <DatePickerComponent
-          value={payload.date} 
-          setValue={(value: any) => mutatePayload('date', value)}
-        />
+        <Box
+          onClick={() => setShowDatePicker(true)}
+          width="196px"
+          sx={{
+            ...InputStyle,
+            marginLeft: 'auto',
+            borderColor: '#5DB4A4 !important',
+            color: '#338379',
+            backgroundColor: '#5DB4A410',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div>
+            {payload.date ?? 'Pilih Tanggal'}
+          </div>
+          <IconButton>
+            <KeyboardArrowDownIcon />
+          </IconButton>
+        </Box>
       </Grid>
       <Box mt="28px">
         <ThisButton
@@ -132,6 +150,12 @@ const ModalAddIncomes = ({
           Tambah Pemasukan
         </ThisButton>
       </Box>
+      <ModalDatePicker
+        open={showDatePicker}
+        handleClose={() => setShowDatePicker(false)}
+        selectDate={(datetime: any) => mutatePayload('date', datetime.format('YYYY-MM-DD'))}
+        date={payload.date}
+      />
     </ModalBottomWrapper>
   )
 }
