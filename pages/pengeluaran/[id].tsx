@@ -9,12 +9,13 @@ import FilterSection from 'components/FilterSection'
 import TopBar from 'components/TopBar'
 import { DateTitle, TransactionItem, BottomFixSection, BottomFixButton } from 'components/screens/pemasukan.style'
 import { Header, TitleHeader, Image } from 'components/Header.style'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ACTIONS from 'store/registerActions'
 import { useRouter } from 'next/router'
 import { parseCurrency } from 'services/helper-client'
 import moment from 'moment'
+import ModalDateRange from 'components/ModalDateRange'
 
 const IconHeader = styled(Box)`
   margin: auto;
@@ -37,6 +38,8 @@ const DetailPengeluaran: NextPage = () => {
   const dispatch = useDispatch()
   const { expenses, tag } = useSelector((state: any) => state.expenses)
   const { id = null } = router.query
+
+  const [showDateRange, setShowDateRange] = useState(false)
 
   useEffect(() => {
     if (id) {
@@ -69,7 +72,7 @@ const DetailPengeluaran: NextPage = () => {
       </Header>
       {/* Bagian isi */}
       <Box p="12px" sx={{ flex: 1, overflow: 'auto' }}>
-        <FilterSection />
+        <FilterSection onClickFilterDate={() => setShowDateRange(true)} />
         {expenses && expenses.map((item: any, i: number) => (
           <Box key={i} mt="24px">
             {/* <DateTitle>10 Maret 2010</DateTitle> */}
@@ -85,6 +88,13 @@ const DetailPengeluaran: NextPage = () => {
           </Box>
         ))}
       </Box>
+      <ModalDateRange
+        open={showDateRange}
+        handleClose={() => setShowDateRange(false)}
+        setStartDate={(date: any) => dispatch(ACTIONS.expenses.setStartDate(date.format('YYYY-MM-DD')))}
+        setEndDate={(date: any) => dispatch(ACTIONS.expenses.setEndDate(date.format('YYYY-MM-DD')))}
+        handleSubmit={() => dispatch(ACTIONS.expenses.getExpenses(id))}
+      />
     </Box>
   )
 }

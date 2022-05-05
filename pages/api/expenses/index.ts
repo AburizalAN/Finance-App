@@ -83,6 +83,7 @@ export default async function handler(
           collection.push({
             id: doc.id,
             ...doc.data(),
+            date: doc.data().date.toDate(),
           })
         })
         return res.status(200).json({ 

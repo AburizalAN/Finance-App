@@ -4,11 +4,11 @@ import IconButton from '@mui/material/IconButton'
 import Filter from 'components/icons/Filter'
 import FilterDate from 'components/FilterDate'
 
-const FilterSection = () => {
+const FilterSection = ({ onClickFilterDate }: any) => {
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item xs="auto">
-        <FilterDate />
+        <FilterDate onClick={onClickFilterDate} />
       </Grid>
       <Grid item xs="auto">
         <IconButton>

@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import Box from '@mui/material/Box'
 import MuiButton from '@mui/material/Button'
 
-const InputStyle = {
+export const InputStyle = {
   padding: '12px 16px',
   border: '1px solid #7C58AA80',
   boxShadow: '0px 0px 20px 0px #7C58AA1A',

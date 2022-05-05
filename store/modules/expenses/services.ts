@@ -7,6 +7,9 @@ async function getExpenses(query: any) {
       delete tempQuery[key]
     }
   })
+  if (tempQuery['id'] === 'total') {
+    delete tempQuery['id']
+  }
   const fixQuery = new URLSearchParams(tempQuery).toString()
   console.log('query', fixQuery)
   const res = await get(`/api/expenses${fixQuery ? `?${fixQuery}` : ''}`)

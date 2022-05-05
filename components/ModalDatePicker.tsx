@@ -53,64 +53,15 @@ const DateItem = styled.div(({ isMarked, isThisMonth }: any) => {
       width: '40px',
       height: '40px',
       fontSize: '12px',
-      color: isThisMonth ? '#000000' : '#c0c0c0',
+      color: isMarked ? 'white' : isThisMonth ? '#000000' : '#c0c0c0',
       borderRadius: '36px',
       border: 'none',
       outline: 'none',
-      background: 'none',
+      background: isMarked ? '#4000d4' : 'none',
       transition: 'all 0.2s ease',
     },
   }
-
-  switch (isMarked) {
-    case 'active':
-      return {
-        ...styles,
-        backgroundColor: '#5331b1',
-        button: {
-          ...styles.button,
-          color: 'white',
-        }
-      }
-    case 'start':
-      return {
-        ...styles,
-        backgroundColor: '#5331b1',
-        borderRadius: '50% 0 0 50%',
-        button: {
-          ...styles.button,
-          backgroundColor: '#4000d4',
-          color: 'white',
-        }
-      }
-    case 'end':
-      return {
-        ...styles,
-        backgroundColor: '#5331b1',
-        borderRadius: '0 50% 50% 0',
-        button: {
-          ...styles.button,
-          backgroundColor: '#4000d4',
-          color: 'white',
-        }
-      }
-    case 'single': {
-      return {
-        ...styles,
-        backgroundColor: '#5331b1',
-        borderRadius: '50%',
-        button: {
-          ...styles.button,
-          backgroundColor: '#4000d4',
-          color: 'white',
-        }
-      }
-    }
-    default:
-      return {
-        ...styles,
-      }
-  }
+  return styles
 })
 
 const HeaderCalendar = styled.div`
@@ -125,17 +76,16 @@ const HeaderCalendar = styled.div`
 interface PropTypes {
   open?: boolean
   handleClose: () => void
-  setStartDate: (value: any) => void
-  setEndDate: (value: any) => void
-  handleSubmit: () => void
+  selectDate: (value: any) => void
+  date?: any
 }
 
-const ModalDateRange = ({ open = false, handleClose, setStartDate, setEndDate, handleSubmit }: PropTypes) => {
+const ModalDatePicker = ({ open = false, handleClose, selectDate, date }: PropTypes) => {
   return (
     <Modal open={open}>
       <Fade in={open}>
         <ModalContainer>
-          <Content handleClose={handleClose} setStartDate={setStartDate} setEndDate={setEndDate} handleSubmit={handleSubmit} />
+          <Content handleClose={handleClose} selectDate={selectDate} date={date} />
         </ModalContainer>
       </Fade>
     </Modal>
@@ -143,16 +93,12 @@ const ModalDateRange = ({ open = false, handleClose, setStartDate, setEndDate, h
 }
 
 
-const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTypes) => {
-  const { date } = useSelector((state: any) => state.expenses)
-  const [selectedDate, setSelectedDate] = useState<any>({
-    point1: moment(date.start),
-    point2: moment(date.end),
-  })
+const Content = ({ handleClose, selectDate, date }: PropTypes) => {
+  const [selectedDate, setSelectedDate] = useState<any>(date ? moment(date) : moment())
   const [dates, setDates] = useState<any>([])
   const [calendar, setCalendar] = useState<any>({
-    month: selectedDate.point1.month(),
-    year: selectedDate.point1.format('YYYY'),
+    month: selectedDate.month(),
+    year: selectedDate.format('YYYY'),
   })
 
   useEffect(() => {
@@ -213,49 +159,11 @@ const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTy
     }))
   }
 
-  const selectDate = (datetime: any) => {
-    const date: any = datetime.split(', ')[0]
-    if (selectedDate.point1 && selectedDate.point2) {
-      setSelectedDate((prev: any) => ({
-        ...prev,
-        point1: moment(date),
-        point2: null,
-      }))
-    } else {
-      setSelectedDate((prev: any) => ({
-        ...prev,
-        point2: moment(date),
-      }))
-    }
-  }
-
-  const checkMarked = (datetime: any) => {
-    const date: any = datetime.split(', ')[0]
-    const now = moment(date)
-    let start, end
-    
-    if (selectedDate.point1.isBefore(selectedDate.point2)) {
-      start = selectedDate.point1
-      end = selectedDate.point2
-    } else if (selectedDate.point1.isAfter(selectedDate.point2)) {
-      start = selectedDate.point2
-      end = selectedDate.point1
-    } else if (now.isSame(selectedDate.point1)) {
-      return 'single'
-    } else {
-      start = null
-      end = null
-    }
-
-    if (now.isBefore(end) && now.isAfter(start)) {
-      return 'active'
-    } else if (now.isSame(start)) {
-      return 'start'
-    } else if (now.isSame(end)) {
-      return 'end'
-    } else {
-      return null
-    }
+  const select = (datetime: any) => {
+    const date: any = moment(datetime.split(', ')[0])
+    setSelectedDate((prev: any) => (date))
+    selectDate(date)
+    handleClose()
   }
 
   const checkThisMonth = (datetime: any) => {
@@ -263,20 +171,10 @@ const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTy
     return date.month() !== calendar.month ? false : true
   }
 
-  useEffect(() => {
-    const { point1, point2 } = selectedDate
-    console.log('selectedDate', selectedDate)
-    if (point1.isBefore(point2)) {
-      setStartDate(point1)
-      setEndDate(point2)
-    } else if (point1.isAfter(point2)) {
-      setStartDate(point2)
-      setEndDate(point1)
-    } else {
-      setStartDate(point1)
-      setEndDate(point1)
-    }
-  }, [selectedDate])
+  const checkMarked = (datetime: any) => {
+    const date: any = moment(datetime.split(', ')[0])
+    return date.isSame(selectedDate) ? true : false
+  }
 
   return (
     <WhiteBox>
@@ -304,28 +202,14 @@ const Content = ({ handleClose, setStartDate, setEndDate, handleSubmit }: PropTy
           <Fragment key={i}>
             {week.map((day: any, j: number) => (
               <DateItem isThisMonth={checkThisMonth(day.jsDate)} isMarked={checkMarked(day.jsDate)} key={j}>
-                <button onClick={() => selectDate(day.jsDate)}>{day.date}</button>
+                <button onClick={() => select(day.jsDate)}>{day.date}</button>
               </DateItem>
             ))}
           </Fragment>
         )) : null}
       </DatesBox>
-      <Box mt="16px">
-        <Button
-          onClick={() => {
-            handleSubmit()
-            handleClose()
-          }}
-          sx={{ p: '14px', borderRadius: '12px' }}
-          variant="contained"
-          fullWidth
-          disableElevation
-        >
-          Save
-        </Button>
-      </Box>
     </WhiteBox>
   )
 }
 
-export default ModalDateRange
+export default ModalDatePicker

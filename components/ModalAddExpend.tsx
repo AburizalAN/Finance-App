@@ -11,7 +11,9 @@ import MuiButton from '@mui/material/Button'
 import Slide from '@mui/material/Slide';
 import { parseCurrency } from 'services/helper-client'
 import ModalBottomWrapper from './ModalBottomWrapper'
-import { InputWrapper, Input, IconWrapper, Button } from 'components/screens/global.style'
+import ModalDatePicker from 'components/ModalDatePicker'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import { InputWrapper, Input, IconWrapper, Button, InputStyle } from 'components/screens/global.style'
 
 interface PropTypes {
   open: boolean
@@ -32,7 +34,9 @@ const ModalAddExpend = ({
   mutatePayload,
   submit,
 }: PropTypes) => {
+
   const [bodyWidth, setBodyWidth] = useState<any>(null)
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
   useEffect(() => {
     if (window) setBodyWidth(document.body.clientWidth)
@@ -82,19 +86,37 @@ const ModalAddExpend = ({
           style={{ flex: 1 }}
         />
       </Grid>
-      <Input
-        value={payload.date}
-        onChange={(e: any) => mutatePayload('date', e.target.value)}
-        placeholder='Tanggal'
-        type="date"
+      <Box
+        onClick={() => setShowDatePicker(true)}
         width="196px"
-        style={{ marginLeft: 'auto' }}
-      />
+        sx={{
+          ...InputStyle,
+          marginLeft: 'auto',
+          color: '#6B518B',
+          backgroundColor: '#F6EFFC80',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div>
+          {payload.date ?? 'Pilih Tanggal'}
+        </div>
+        <IconButton>
+          <KeyboardArrowDownIcon />
+        </IconButton>
+      </Box>
       <Box mt="28px">
         <Button onClick={submit} disableElevation fullWidth variant="contained">
           Catat Pengeluaran
         </Button>
       </Box>
+      <ModalDatePicker
+        open={showDatePicker}
+        handleClose={() => setShowDatePicker(false)}
+        selectDate={(datetime: any) => mutatePayload('date', datetime.format('YYYY-MM-DD'))}
+        date={payload.date}
+      />
     </ModalBottomWrapper>
   )
 }
