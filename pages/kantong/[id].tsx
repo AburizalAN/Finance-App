@@ -16,11 +16,12 @@ import ACTIONS from 'store/registerActions'
 import { parseCurrency } from 'services/helper-client'
 import moment from 'moment'
 import ModalAddIncomes from 'components/ModalAddIncomes'
+import Skeleton from '@mui/material/Skeleton'
 
 const Pemasukan: NextPage = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const { incomes } = useSelector((state: any) => state.incomes)
+  const { incomes, loading } = useSelector((state: any) => state.incomes)
   const { id = null } = router.query
 
   const [showAddIncomes, setShowAddIncomes] = useState(false)
@@ -56,7 +57,13 @@ const Pemasukan: NextPage = () => {
         <FilterSection />
         <Box mt="24px">
           {/* <DateTitle>10 Maret 2010</DateTitle> */}
-          {incomes && incomes.map((item: any, i: number) => (
+          {loading ? (
+            [...Array(7)].map((_, i) => (
+              <TransactionItem key={i}>
+                <Skeleton variant="rectangular" width="100%" height="30px" />
+              </TransactionItem>
+            ))
+          ) : !loading && incomes.length > 0 ? incomes.map((item: any, i: number) => (
             <TransactionItem key={i}>
               <div>
                 <div className="label">{item.from}</div>
@@ -64,7 +71,7 @@ const Pemasukan: NextPage = () => {
               </div>
               <div className="price">+Rp{parseCurrency(item.value)}</div>
             </TransactionItem>
-          ))}
+          )) : null}
         </Box>
       </Box>
       {/* Bagian Bottom Navigation */}

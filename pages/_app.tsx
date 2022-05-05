@@ -4,8 +4,19 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles'
 import { wrapper } from 'store'
 import { theme } from 'components/style'
 import Head from 'next/head'
+import Cookie from 'js-cookie'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!Cookie.get('AuthToken')) {
+      router.push(`/login?redirect=${router.asPath}`)
+    }
+  }, [])
+
   return (
     <ThemeProvider theme={theme}>
       <Head>

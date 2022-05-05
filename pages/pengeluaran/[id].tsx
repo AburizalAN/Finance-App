@@ -16,6 +16,7 @@ import { useRouter } from 'next/router'
 import { parseCurrency } from 'services/helper-client'
 import moment from 'moment'
 import ModalDateRange from 'components/ModalDateRange'
+import Skeleton from '@mui/material/Skeleton'
 
 const IconHeader = styled(Box)`
   margin: auto;
@@ -36,7 +37,7 @@ const ThisTransactionItem = styled(TransactionItem)`
 const DetailPengeluaran: NextPage = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const { expenses, tag } = useSelector((state: any) => state.expenses)
+  const { expenses, tag, loading } = useSelector((state: any) => state.expenses)
   const { id = null } = router.query
 
   const [showDateRange, setShowDateRange] = useState(false)
@@ -73,20 +74,28 @@ const DetailPengeluaran: NextPage = () => {
       {/* Bagian isi */}
       <Box p="12px" sx={{ flex: 1, overflow: 'auto' }}>
         <FilterSection onClickFilterDate={() => setShowDateRange(true)} />
-        {expenses && expenses.map((item: any, i: number) => (
-          <Box key={i} mt="24px">
-            {/* <DateTitle>10 Maret 2010</DateTitle> */}
-            <Box>
-              <ThisTransactionItem>
-                <div>
-                  <div className="label">{item.label}</div>
-                  <div className="date">{moment(item.date).format('DD MMMM YYYY')}</div>
-                </div>
-                <div className="price">-Rp{parseCurrency(item.value)}</div>
-              </ThisTransactionItem>
+        {loading ? (
+          [...Array(4)].map((_, i) => (
+            <Box key={i} mt="24px">
+              <Skeleton variant="rectangular" width="100%" height="30px" />
             </Box>
-          </Box>
-        ))}
+          ))
+        ) : !loading && expenses.length > 0 ? (
+          expenses.map((item: any, i: number) => (
+            <Box key={i} mt="24px">
+              {/* <DateTitle>10 Maret 2010</DateTitle> */}
+              <Box>
+                <ThisTransactionItem>
+                  <div>
+                    <div className="label">{item.label}</div>
+                    <div className="date">{moment(item.date).format('DD MMMM YYYY')}</div>
+                  </div>
+                  <div className="price">-Rp{parseCurrency(item.value)}</div>
+                </ThisTransactionItem>
+              </Box>
+            </Box>
+          ))
+        ) : null}
       </Box>
       <ModalDateRange
         open={showDateRange}

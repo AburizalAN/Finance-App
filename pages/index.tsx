@@ -47,13 +47,9 @@ const Home: NextPage = () => {
   }, [])
 
   useEffect(() => {
-    if (Cookie.get('AuthToken')) {
-      dispatch(ACTIONS.incomes.getIncomes())
-      dispatch(ACTIONS.incomes.getKantong())
-      dispatch(ACTIONS.expenses.getExpenses())
-    } else {
-      router.push(`/login?redirect=${router.asPath}`)
-    }
+    dispatch(ACTIONS.incomes.getIncomes())
+    dispatch(ACTIONS.incomes.getKantong())
+    dispatch(ACTIONS.expenses.getExpenses())
   }, []);
 
   useEffect(() => {

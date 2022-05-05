@@ -5,6 +5,7 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import GoogleLogin from 'react-google-login'
 import Cookie from 'js-cookie'
+import Box from '@mui/material/Box'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
@@ -27,6 +28,15 @@ const ContainerLogin = styled.div`
   gap: 20px;
   width: 100%;
   padding: 0 36px;
+`
+const ImageWrapper = styled.div`
+  width: 130px;
+  height: 130px;
+  & > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 `
 
 const MyGoogleButton = (props: any) => {
@@ -64,14 +74,18 @@ const Login: NextPage = () => {
   return (
     <BodyWrapper sx={bodyStyle}  pt="24px" pb="72px" px="12px">
       <ContainerLogin>
+        <ImageWrapper>
+          <img src="/finance-icon.png" alt="finance-icon" />
+        </ImageWrapper>
         <Typography
           variant="h5"
           component="div"
           sx={{
             fontWeight: 'bold',
           }}
+          mb="12px"
         >
-          Login
+          My Finance App
         </Typography>
         <GoogleLogin
           clientId={clientId}
