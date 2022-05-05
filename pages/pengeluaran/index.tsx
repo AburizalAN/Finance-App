@@ -150,8 +150,6 @@ const Pengeluaran: NextPage = () => {
     }
   }, [selectedTag])
 
-  console.log('date', date)
-
   return (
     <Box px="12px" pb="24px" sx={{ minHeight: "100vh", position: 'relative' }}>
       <TopBar backAction={() => router.push('/')} title="Pengeluaran" />

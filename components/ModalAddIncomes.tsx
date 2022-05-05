@@ -76,8 +76,6 @@ const ModalAddIncomes = ({
     mutatePayload('kantong', id)
   }, [id])
 
-  console.log(payload)
-
   return (
     <ModalBottomWrapper
       open={open} 
@@ -93,7 +91,7 @@ const ModalAddIncomes = ({
         <TopBarTitle 
           style={{ color: '#484848', marginLeft: '12px' }}
         >
-          Tambah Pengeluaran
+          Tambah Pemasukan
         </TopBarTitle>
       </Grid>
       <Grid container direction="column" rowGap="12px">
