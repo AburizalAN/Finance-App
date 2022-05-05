@@ -15,6 +15,7 @@ import { ThisCard, ThisAddButton, ThisLinearProgress, AddButtonWrapper } from 'c
 import ModalAddExpend from 'components/ModalAddExpend'
 import ModalSelectTag from 'components/ModalSelectTag'
 import { useRouter } from 'next/router'
+import Skeleton from '@mui/material/Skeleton'
 
 import { useSelector, useDispatch } from 'react-redux'
 import ACTIONS from 'store/registerActions'
@@ -25,7 +26,7 @@ import ModalDateRange from 'components/ModalDateRange'
 const Pengeluaran: NextPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { summary, expenses, tags, date } = useSelector((state: any) => state.expenses)
+  const { expenses, tags, date, loading } = useSelector((state: any) => state.expenses)
   const { tags: listTags } = useSelector((state: any) => state.expenses)
 
   const [totalExpenses, setTotalExpenses] = useState(0)
@@ -192,51 +193,59 @@ const Pengeluaran: NextPage = () => {
         </IconButton>
       </Grid>
       <Grid container direction="column" sx={{ rowGap: '12px' }}>
-        <Link href={`/pengeluaran/total`} passHref>
-          <Grid item xs="auto">
-            <ThisCard>
-              <div className="icon">
-                <Bill fontSize="16px"/>
-              </div>
-              <Box sx={{ flex: 1 }}>
-                <h5>Total</h5>
-                <Box mt="8px">
-                  <ThisLinearProgress variant="determinate" value={100} />
-                </Box>
-              </Box>
-              <IconButton>
-                <ArrowForwardIosIcon sx={{ fontSize: '16px' }} />
-              </IconButton>
-            </ThisCard>
-          </Grid>
-        </Link>
-        {filteredTag.map((tag: any, i: number) => (
-          <Link key={i} href={`/pengeluaran/${tag.id}`} passHref>
-            <Grid item xs="auto">
-              <ThisCard>
-                <div className="icon" 
-                  style={{ 
-                    backgroundColor: tag.color 
-                  }}
-                >
-                  <Bill fontSize="16px"/>
-                </div>
-                <Box sx={{ flex: 1 }}>
-                  <h5>{tag.name}</h5>
-                  <Box mt="8px">
-                    <ThisLinearProgress
-                      variant="determinate"
-                      value={tag.amount / totalExpenses * 100}
-                    />
+        {loading ? (
+          [...Array(4)].map((_, i) => (
+            <Skeleton key={i} variant="rectangular" width="100%" height="60px" />
+          ))
+        ) : !loading && filteredTag.length > 0 ? (
+          <>
+            <Link href={`/pengeluaran/total`} passHref>
+              <Grid item xs="auto">
+                <ThisCard>
+                  <div className="icon">
+                    <Bill fontSize="16px"/>
+                  </div>
+                  <Box sx={{ flex: 1 }}>
+                    <h5>Total</h5>
+                    <Box mt="8px">
+                      <ThisLinearProgress variant="determinate" value={100} />
+                    </Box>
                   </Box>
-                </Box>
-                <IconButton>
-                  <ArrowForwardIosIcon sx={{ fontSize: '16px' }} />
-                </IconButton>
-              </ThisCard>
-            </Grid>
-          </Link>
-        ))}
+                  <IconButton>
+                    <ArrowForwardIosIcon sx={{ fontSize: '16px' }} />
+                  </IconButton>
+                </ThisCard>
+              </Grid>
+            </Link>
+            {filteredTag.map((tag: any, i: number) => (
+              <Link key={i} href={`/pengeluaran/${tag.id}`} passHref>
+                <Grid item xs="auto">
+                  <ThisCard>
+                    <div className="icon" 
+                      style={{ 
+                        backgroundColor: tag.color 
+                      }}
+                    >
+                      <Bill fontSize="16px"/>
+                    </div>
+                    <Box sx={{ flex: 1 }}>
+                      <h5>{tag.name}</h5>
+                      <Box mt="8px">
+                        <ThisLinearProgress
+                          variant="determinate"
+                          value={tag.amount / totalExpenses * 100}
+                        />
+                      </Box>
+                    </Box>
+                    <IconButton>
+                      <ArrowForwardIosIcon sx={{ fontSize: '16px' }} />
+                    </IconButton>
+                  </ThisCard>
+                </Grid>
+              </Link>
+            ))}
+          </>
+        ) : null }
       </Grid>
       <AddButtonWrapper width={bodyWidth}>
         <ThisAddButton onClick={() => setShowAddExpend(true)}>
