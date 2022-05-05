@@ -5,10 +5,12 @@ import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import { SliderGrid, AddButton } from 'components/style'
-import CardKantong from 'components/CardKantong'
+import CardKantong, { ThisCard as CardKantongWrapper } from 'components/CardKantong'
 import AddIcon from 'components/icons/AddIcon'
 import Link from 'next/link'
 import ModalAddKantong from 'components/ModalAddKantong'
+import { useSelector } from 'react-redux'
+import Skeleton from '@mui/material/Skeleton'
 
 const Container = styled.div`
   margin-top: 62px;
@@ -31,6 +33,7 @@ interface TabPanelProps {
   index: number
   value: number
   list: Array<any>
+  addNewKantong?: () => void
 }
 
 interface TabItem {
@@ -45,22 +48,42 @@ const tabItems: Array<TabItem> = [
 ]
 
 const TabPanel = (props: TabPanelProps) => {
-  const { list, index, value } = props
+  const { list, index, value, addNewKantong } = props
+  const { loading } = useSelector((state: any) => state.incomes)
 
   return (
     <Box mx="-12px" hidden={index !== value}>
       <SliderGrid columnSpacing="12px" px="12px">
-        {list.map((item, i: number) => (
-          <Link href={`/kantong/${item.id}`} key={i} passHref>
-            <Grid item>
-              <CardKantong
-                name={item.name}
-                amount={item.amount}
-                category={item.category}
-              />
+        {loading ? (
+          [...Array(4)].map((_, i) => (
+            <Grid item key={i}>
+              <Skeleton variant="rectangular" width={155} height={200} />
             </Grid>
-          </Link>
-        ))}
+          ))
+        ) : !loading && list.length > 0 ? (
+          list.map((item, i: number) => (
+            <Link href={`/kantong/${item.id}`} key={i} passHref>
+              <Grid item>
+                <CardKantong
+                  name={item.name}
+                  amount={item.amount}
+                  category={item.category}
+                  image={"/money-bag.png"}
+                />
+              </Grid>
+            </Link>
+          ))
+        ) : null}
+
+        {!loading ? (
+          <Grid item>
+            <CardKantong
+              name="Tambah Kantong Baru"
+              image="/AddIcon.png"
+              onClick={addNewKantong}
+            />
+          </Grid>
+        ) : null}
       </SliderGrid>
     </Box>
   )
@@ -86,9 +109,9 @@ const TabKantong = ({ list }: {list: Array<any>}) => {
           ))}
         </Tabs>
       </Box>
-      <TabPanel list={list} value={value} index={0} />
-      <TabPanel list={listTabungan} value={value} index={1} />
-      <TabPanel list={listInvestasi} value={value} index={2} />
+      <TabPanel addNewKantong={() => setShowAddKantong(true)} list={list} value={value} index={0} />
+      <TabPanel addNewKantong={() => setShowAddKantong(true)} list={listTabungan} value={value} index={1} />
+      <TabPanel addNewKantong={() => setShowAddKantong(true)} list={listInvestasi} value={value} index={2} />
       <AddButton onClick={() => setShowAddKantong(true)}>
         <AddIcon />
       </AddButton>
