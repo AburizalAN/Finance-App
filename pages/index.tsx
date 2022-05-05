@@ -17,10 +17,11 @@ const Home: NextPage = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const { incomes, kantong } = useSelector((state: any) => state.incomes)
+  const { expenses } = useSelector((state: any) => state.expenses)
 
   const [listKantong, setListKantong] = useState<Array<any>>([])
   const [totalSaldo, setTotalSaldo] = useState(0)
-
+  const [totalExpenses, setTotalExpenses] = useState(0)
   // const kantongRef = collection(db, 'kantong')
 
   // useEffect(() => {
@@ -49,6 +50,7 @@ const Home: NextPage = () => {
     if (Cookie.get('AuthToken')) {
       dispatch(ACTIONS.incomes.getIncomes())
       dispatch(ACTIONS.incomes.getKantong())
+      dispatch(ACTIONS.expenses.getExpenses())
     } else {
       router.push(`/login?redirect=${router.asPath}`)
     }
@@ -79,6 +81,14 @@ const Home: NextPage = () => {
     setTotalSaldo(totalSaldo)
   }, [incomes])
 
+  useEffect(() => {
+    let total: number = 0;
+    expenses.forEach((expense: any) => {
+      total += expense.value
+    })
+    setTotalExpenses(total)
+  }, [expenses])
+
   return (
     <BodyWrapper pt="24px" pb="72px" px="12px">
       <Head>
@@ -94,7 +104,7 @@ const Home: NextPage = () => {
 
       <TotalSaldoComponent amount={totalSaldo} />
       <TabKantong list={listKantong} />
-      <BannerPengeluaran />
+      <BannerPengeluaran amount={totalExpenses} />
     </BodyWrapper>
   )
 }

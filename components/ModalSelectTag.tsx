@@ -21,6 +21,8 @@ const ModalBox = styled(Box)(() => (`
   background-color: #FCFCFC;
   border-radius: 12px;
   padding: 16px;
+  max-width: 500px;
+  margin: auto;
 `))
 const ModalTitle = styled.div`
   font-size: 15px;
@@ -78,8 +80,8 @@ const ModalSelectTag = ({ open, handleClose, tags, onSelect }: PropTypes) => {
   return (
     <Modal open={open} onClose={handleClose}>
       <Fade in={open}>
-        <Container>
-          <ModalBox>
+        <Container onClick={handleClose}>
+          <ModalBox onClick={(e) => e.stopPropagation()}>
             <ModalTitle>
               Pilih Tag
             </ModalTitle>

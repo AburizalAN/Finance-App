@@ -2,6 +2,7 @@ import Grid from '@mui/material/Grid'
 import styled from '@emotion/styled'
 import ArchiveOut from 'components/icons/ArchiveOut'
 import Link from 'next/link'
+import { parseCurrency } from 'services/helper-client'
 
 const Container = styled(Grid)`
   margin-top: 62px;
@@ -9,6 +10,7 @@ const Container = styled(Grid)`
   border: 1px solid #7C58AA80;
   border-radius: 16px;
   padding: 30px 16px;
+  cursor: pointer;
 `
 Container.defaultProps = { container: true }
 
@@ -26,13 +28,17 @@ const Title = styled.div`
   color: #72558E;
 `
 
-const BannerPengeluaran = () => {
+interface PropTypes {
+  amount: number
+}
+
+const BannerPengeluaran = ({ amount }: PropTypes) => {
   return (
     <Link href="/pengeluaran" passHref>
       <Container alignItems="center">
         <Grid item xs>
           <SubTitle>Pengeluaran Saya</SubTitle>
-          <Title>Rp1.000.000</Title>
+          <Title>Rp{parseCurrency(amount)}</Title>
         </Grid>
         <Grid item xs="auto" mr="16px">
           <ArchiveOut />

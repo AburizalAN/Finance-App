@@ -11,7 +11,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import IconButton from '@mui/material/IconButton'
 import AddIcon from 'components/icons/AddIcon'
 import Link from 'next/link'
-import { ThisCard, ThisAddButton, ThisLinearProgress } from 'components/screens/pengeluaran.style'
+import { ThisCard, ThisAddButton, ThisLinearProgress, AddButtonWrapper } from 'components/screens/pengeluaran.style'
 import ModalAddExpend from 'components/ModalAddExpend'
 import ModalSelectTag from 'components/ModalSelectTag'
 import { useRouter } from 'next/router'
@@ -50,6 +50,7 @@ const Pengeluaran: NextPage = () => {
     date: null,
     value: 0,
   })
+  const [bodyWidth, setBodyWidth] = useState<any>(null)
 
   const mutatePayload = (key: string, value: any) => {
     setPayload((prev: any) => ({
@@ -81,10 +82,19 @@ const Pengeluaran: NextPage = () => {
   }
 
   useEffect(() => {
+    if (window) {
+      window.addEventListener('resize', () => {
+        setBodyWidth(document.body.clientWidth)
+      })
+    }
+  })
+
+  useEffect(() => {
     // const unsubscribe = onSnapshot(expensesRef, (querySnapshot) => {
     //   dispatch(ACTIONS.expenses.getSummaryExpenses())
     //   console.log('listen')
     // });
+    if (window) setBodyWidth(document.body.clientWidth)
     dispatch(ACTIONS.expenses.getTags())
     dispatch(ACTIONS.expenses.getExpenses())
   }, [])
@@ -228,9 +238,11 @@ const Pengeluaran: NextPage = () => {
           </Link>
         ))}
       </Grid>
-      <ThisAddButton onClick={() => setShowAddExpend(true)}>
-        <AddIcon />
-      </ThisAddButton>
+      <AddButtonWrapper width={bodyWidth}>
+        <ThisAddButton onClick={() => setShowAddExpend(true)}>
+          <AddIcon />
+        </ThisAddButton>
+      </AddButtonWrapper>
       <ModalAddExpend 
         open={showAddExpend}
         handleClose={handleCloseAddExpend}

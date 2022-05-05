@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress'
 import { Card, AddButton } from 'components/style'
+import Box from '@mui/material/Box'
 
 export const ThisCard = styled(Card)`
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
@@ -23,7 +24,7 @@ export const ThisCard = styled(Card)`
   }
 `
 export const ThisAddButton = styled(AddButton)`
-  position: fixed;
+  position: absolute;
   transform: none;
   bottom: 12px;
   right: 12px;
@@ -40,3 +41,12 @@ export const ThisLinearProgress = styled(LinearProgress)(({ theme }) => ({
     backgroundColor: '#66DA94',
   },
 }));
+
+export const AddButtonWrapper = styled(Box)(({ width }: any) => ({
+  width: width || '100%',
+  position: 'fixed',
+  margin: 'auto',
+  bottom: 0,
+  left: '50%',
+  transform: 'translateX(-50%)',
+}))
